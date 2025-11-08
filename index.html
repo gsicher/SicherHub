@@ -149,7 +149,8 @@
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>{ type: </span><span class="s10">'multiply'</span><span class="s1">, </span><span class="s8">symbol</span><span class="s1">: </span><span class="s10">'×'</span><span class="s1">, generate: (max) =&gt; {</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">const</span><span class="s1"> num1 = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * </span><span class="s13">9</span><span class="s1">) + </span><span class="s13">2</span><span class="s1">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">const</span><span class="s1"> num2 = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * </span><span class="s13">9</span><span class="s1">) + </span><span class="s13">2</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">if</span><span class="s1"> (difficulty !== </span><span class="s10">'easy'</span><span class="s1"> &amp;&amp; </span><span class="s12">Math</span><span class="s1">.random() &gt; </span><span class="s13">0.7</span><span class="s1">) { </span><span class="s14">// Sometimes include division</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                    </span></span><span class="s1">// Introduce division sometimes in medium/hard mode</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">if</span><span class="s1"> (difficulty !== </span><span class="s10">'easy'</span><span class="s1"> &amp;&amp; </span><span class="s12">Math</span><span class="s1">.random() &gt; </span><span class="s13">0.7</span><span class="s1">) {<span class="Apple-converted-space"> </span></span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">const</span><span class="s1"> divisor = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * </span><span class="s13">9</span><span class="s1">) + </span><span class="s13">2</span><span class="s1">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">const</span><span class="s1"> quotient = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * </span><span class="s13">10</span><span class="s1">) + </span><span class="s13">2</span><span class="s1">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">return</span><span class="s1"> { num1: divisor * quotient, num2: divisor, </span><span class="s8">symbol</span><span class="s1">: </span><span class="s10">'÷'</span><span class="s1">, answer: quotient, type: </span><span class="s10">'divide'</span><span class="s1"> };</span></p>
@@ -171,6 +172,9 @@
 <p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
 <p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> updateUI() {</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Guard clause to prevent rendering before root element is available</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (!rootElement) </span><span class="s8">return</span><span class="s1">;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>rootElement.innerHTML = renderContent();</span></p>
 <p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Re-attach event listeners after rendering (crucial for vanilla JS)</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>attachEventListeners();</span></p>
@@ -294,6 +298,7 @@
 <p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> feedbackBox = document.getElementById(</span><span class="s10">'feedback-box'</span><span class="s1">);</span></p>
 <p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (!input || !feedbackBox || input.value === </span><span class="s10">''</span><span class="s1"> || isNaN(parseInt(input.value, </span><span class="s13">10</span><span class="s1">))) {</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// If input is empty or invalid, just return without error</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">return</span><span class="s1">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
 <p class="p7"><span class="s7"></span><br></p>
@@ -314,7 +319,7 @@
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>animationText = combo &gt; </span><span class="s13">1</span><span class="s1"> ? </span><span class="s10">'COMBO!'</span><span class="s1"> : </span><span class="s10">'POW'</span><span class="s1">;</span></p>
 <p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">let</span><span class="s1"> damage = </span><span class="s13">1</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (combo &gt; </span><span class="s13">1</span><span class="s1">) damage += </span><span class="s13">1</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (combo &gt;= </span><span class="s13">3</span><span class="s1">) damage += </span><span class="s13">1</span><span class="s1">; </span><span class="s14">// 3-hit combo grants bonus damage</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">let</span><span class="s1"> finalDamage = damage;</span></p>
 <p class="p7"><span class="s7"></span><br></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (powerUp === </span><span class="s10">'DOUBLE'</span><span class="s1">) {</span></p>
@@ -336,7 +341,7 @@
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (powerUp === </span><span class="s10">'SHIELD'</span><span class="s1">) {</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>damageTaken = </span><span class="s13">0</span><span class="s1">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>powerUp = </span><span class="s8">null</span><span class="s1">; </span><span class="s14">// Power up consumed</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>damageText = </span><span class="s10">'SHIELD!'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>damageText = </span><span class="s10">'SHIELD ACTIVATED!'</span><span class="s1">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>finalHeroHealth = heroHealth - damageTaken;</span></p>
 <p class="p7"><span class="s7"></span><br></p>
@@ -357,7 +362,7 @@
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s8">else</span><span class="s1"> {</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s14">// Continue battle</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>currentQuestion = generateQuestion(level, isBoss);</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">                    </span></span><span class="s1">// 1 in 5 chance to find a power-up if one isn't active</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                    </span></span><span class="s1">// 1 in 4 chance to find a power-up if one isn't active and not in boss mode</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">if</span><span class="s1"> (!powerUp &amp;&amp; </span><span class="s12">Math</span><span class="s1">.random() &lt; </span><span class="s13">0.25</span><span class="s1"> &amp;&amp; !isBoss) {</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">const</span><span class="s1"> powerUpsList = [</span><span class="s10">'DOUBLE'</span><span class="s1">, </span><span class="s10">'SHIELD'</span><span class="s1">];</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>powerUp = powerUpsList[</span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * powerUpsList.length)];</span></p>
@@ -368,6 +373,9 @@
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>input.value = </span><span class="s10">''</span><span class="s1">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>input.disabled = </span><span class="s8">false</span><span class="s1">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(</span><span class="s10">'attack-button'</span><span class="s1">).disabled = </span><span class="s8">false</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// Remove feedback text class immediately to re-hide it before next action</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">                </span>feedbackBox.className = </span><span class="s1">'mt-4 py-4 rounded-2xl text-2xl font-black text-white invisible'</span><span class="s4">;</span></p>
 <p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>updateUI(); </span><span class="s14">// Re-render the game state</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
@@ -381,7 +389,7 @@
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="h-4 md:h-6 w-full bg-gray-300 rounded-full overflow-hidden shadow-inner"&gt;</span></p>
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="h-full </span><span class="s4">${color}</span><span class="s1"> transition-all duration-300 ease-out rounded-full" style="width: </span><span class="s4">${percentage}</span><span class="s1">%;"&gt;&lt;/div&gt;</span></p>
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="text-xs md:text-sm font-semibold mt-1 text-white"&gt;</span><span class="s4">${current}</span><span class="s1"> / </span><span class="s4">${max}</span><span class="s1"> HP&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="text-xs md:text-sm font-semibold mt-1 text-white"&gt;</span><span class="s4">${</span><span class="s12">Math</span><span class="s4">.max(</span><span class="s13">0</span><span class="s4">, current)}</span><span class="s1"> / </span><span class="s4">${max}</span><span class="s1"> HP&lt;/div&gt;</span></p>
 <p class="p8"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
 <p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
@@ -485,8 +493,8 @@
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
 <p class="p10"><span class="s1"><span class="Apple-converted-space">                        </span></span></p>
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;!-- Feedback Box --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;!-- Set to invisible by default, will be revealed with correct/incorrect class --&gt;</span></p>
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div id="feedback-box" class="mt-4 py-4 rounded-2xl text-2xl font-black text-white invisible"&gt;</span></p>
-<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>Awaiting action...</span></p>
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
 <p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
@@ -573,11 +581,12 @@
 <p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
 <p class="p7"><span class="s7"></span><br></p>
 <p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- INITIALIZATION ---</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// Start the game by rendering the initial state</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// Use DOMContentLoaded to ensure the script runs only after the HTML structure is loaded.</span></p>
 <p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>document.addEventListener(</span><span class="s10">'DOMContentLoaded'</span><span class="s1">, updateUI);</span></p>
 <p class="p7"><span class="s7"></span><br></p>
 <p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">script</span><span class="s3">&gt;</span></p>
 <p class="p2"><span class="s3">&lt;/</span><span class="s1">body</span><span class="s3">&gt;</span></p>
 <p class="p2"><span class="s3">&lt;/</span><span class="s1">html</span><span class="s3">&gt;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
 </body>
 </html>
