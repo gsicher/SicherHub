@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Math Battle</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+        @keyframes explode {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
+            100% { transform: scale(3) rotate(360deg); opacity: 0; }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); }
+            50% { box-shadow: 0 0 40px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 255, 0, 0.6); }
+        }
+        @keyframes slide-in {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .shake { animation: shake 0.5s; }
+        .explode { animation: explode 0.6s; }
+        .pulse-glow { animation: pulse-glow 1s infinite; }
+        .slide-in { animation: slide-in 0.5s; }
+        .float { animation: float 2s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function SuperheroMathGame() {
+          const [gameState, setGameState] = useState('hero-select');
+          const [selectedHero, setSelectedHero] = useState(null);
+          const [villain, setVillain] = useState(null);
+          const [score, setScore] = useState(0);
+          const [villainHealth, setVillainHealth] = useState(5);
+          const [heroHealth, setHeroHealth] = useState(3);
+          const [currentQuestion, setCurrentQuestion] = useState(null);
+          const [userAnswer, setUserAnswer] = useState('');
+          const [feedback, setFeedback] = useState('');
+          const [combo, setCombo] = useState(0);
+          const [showAnimation, setShowAnimation] = useState('');
+          const [powerUp, setPowerUp] = useState(null);
+          const [timeLeft, setTimeLeft] = useState(15);
+          const [particles, setParticles] = useState([]);
+          const [shakeScreen, setShakeScreen] = useState(false);
+          const [level, setLevel] = useState(1);
+          const [isBoss, setIsBoss] = useState(false);
+
+          const heroes = [
+            { name: 'Spider-Man', color: 'red', emoji: '🕷️', power: 'Web Blast', universe: 'Marvel', special: '🕸️' },
+            { name: 'Batman', color: 'gray', emoji: '🦇', power: 'Batarang', universe: 'DC', special: '🌙' },
+            { name: 'Iron Man', color: 'yellow', emoji: '🤖', power: 'Repulsor Ray', universe: 'Marvel', special: '⚡' },
+            { name: 'Superman', color: 'blue', emoji: '💪', power: 'Heat Vision', universe: 'DC', special: '☀️' },
+            { name: 'Black Panther', color: 'purple', emoji: '🐾', power: 'Vibranium Strike', universe: 'Marvel', special: '💎' },
+            { name: 'Wonder Woman', color: 'red', emoji: '⚔️', power: 'Lasso Strike', universe: 'DC', special: '⭐' }
+          ];
+
+          const villains = [
+            { name: 'Green Goblin', emoji: '👺', taunt: 'You\'ll never catch me!', universe: 'Marvel' },
+            { name: 'Joker', emoji: '🃏', taunt: 'Let\'s put a smile on that face!', universe: 'DC' },
+            { name: 'Venom', emoji: '👾', taunt: 'We are Venom!', universe: 'Marvel' },
+            { name: 'Penguin', emoji: '🐧', taunt: 'Wak wak wak!', universe: 'DC' },
+            { name: 'Mysterio', emoji: '🎭', taunt: 'It\'s all an illusion!', universe: 'Marvel' }
+          ];
+
+          const bossVillains = [
+            { name: 'THANOS', emoji: '👊', taunt: 'I am inevitable!', universe: 'Marvel', isBoss: true },
+            { name: 'DARKSEID', emoji: '👹', taunt: 'Kneel before Darkseid!', universe: 'DC', isBoss: true },
+            { name: 'ULTRON', emoji: '🤖', taunt: 'There are no strings on me!', universe: 'Marvel', isBoss: true }
+          ];
+
+          useEffect(() => {
+            if (gameState === 'battle' && timeLeft > 0 && feedback === '') {
+              const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+              return () => clearTimeout(timer);
+            } else if (timeLeft === 0 && feedback === '') {
+              handleTimeOut();
+            }
+          }, [timeLeft, gameState, feedback]);
+
+          const handleTimeOut = () => {
+            setHeroHealth(heroHealth - 1);
+            setCombo(0);
+            setFeedback('timeout');
+            setShowAnimation('TIME UP');
+            setShakeScreen(true);
+            
+            setTimeout(() => {
+              setShakeScreen(false);
+              if (heroHealth - 1 <= 0) {
+                setGameState('game-over');
+              } else {
+                setFeedback('');
+                setUserAnswer('');
+                setTimeLeft(15);
+                generateQuestion();
+              }
+            }, 1500);
+          };
+
+          const createParticles = (type) => {
+            const newParticles = [];
+            for (let i = 0; i < 15; i++) {
+              newParticles.push({
+                id: Math.random(),
+                x: Math.random() * 100,
+                y: Math.random() * 100,
+                emoji: type === 'correct' ? ['⭐', '💥', '✨'][Math.floor(Math.random() * 3)] : '💔'
+              });
+            }
+            setParticles(newParticles);
+            setTimeout(() => setParticles([]), 1000);
+          };
+
+          const generateQuestion = () => {
+            const difficulty = isBoss ? 'hard' : level <= 2 ? 'easy' : level <= 4 ? 'medium' : 'hard';
+            
+            const operations = [
+              { type: 'add', symbol: '+', generate: () => {
+                const max = difficulty === 'easy' ? 20 : difficulty === 'medium' ? 50 : 100;
+                const num1 = Math.floor(Math.random() * max) + 5;
+                const num2 = Math.floor(Math.random() * max) + 5;
+                return { num1, num2, answer: num1 + num2 };
+              }},
+              { type: 'subtract', symbol: '-', generate: () => {
+                const max = difficulty === 'easy' ? 30 : difficulty === 'medium' ? 70 : 150;
+                const num1 = Math.floor(Math.random() * max) + 15;
+                const num2 = Math.floor(Math.random() * num1) + 1;
+                return { num1, num2, answer: num1 - num2 };
+              }},
+              { type: 'multiply', symbol: '×', generate: () => {
+                const max = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 12 : 15;
+                const num1 = Math.floor(Math.random() * max) + 2;
+                const num2 = Math.floor(Math.random() * max) + 2;
+                return { num1, num2, answer: num1 * num2 };
+              }}
+            ];
+
+            const op = operations[Math.floor(Math.random() * operations.length)];
+            const question = op.generate();
+            
+            setCurrentQuestion({ ...question, symbol: op.symbol, type: op.type });
+            
+            // Random power-up (20% chance)
+            if (Math.random() > 0.8 && !powerUp) {
+              const powerUps = ['DOUBLE', 'SHIELD', 'TIME'];
+              setPowerUp(powerUps[Math.floor(Math.random() * powerUps.length)]);
+            }
+          };
+
+          const selectHero = (hero) => {
+            setSelectedHero(hero);
+            startNewLevel(1, false);
+          };
+
+          const startNewLevel = (newLevel, boss) => {
+            setLevel(newLevel);
+            setIsBoss(boss);
+            
+            let selectedVillain;
+            if (boss) {
+              selectedVillain = bossVillains[Math.floor(Math.random() * bossVillains.length)];
+            } else {
+              selectedVillain = villains[Math.floor(Math.random() * villains.length)];
+            }
+            
+            setVillain(selectedVillain);
+            setGameState('battle');
+            setScore(0);
+            setVillainHealth(boss ? 10 : 5);
+            setHeroHealth(3);
+            setCombo(0);
+            setTimeLeft(15);
+            setPowerUp(null);
+            generateQuestion();
+          };
+
+          const checkAnswer = () => {
+            const correct = parseInt(userAnswer) === currentQuestion.answer;
+            
+            if (correct) {
+              let damage = 1;
+              if (powerUp === 'DOUBLE') {
+                damage = 2;
+                setPowerUp(null);
+              }
+              
+              setScore(score + damage);
+              setCombo(combo + 1);
+              setVillainHealth(villainHealth - damage);
+              setFeedback('correct');
+              setShowAnimation(combo >= 2 ? 'COMBO!' : 'POW');
+              setTimeLeft(15);
+              createParticles('correct');
+              
+              setTimeout(() => {
+                setShowAnimation('');
+                if (villainHealth - damage <= 0) {
+                  if (isBoss) {
+                    setGameState('victory');
+                  } else {
+                    setGameState('level-complete');
+                  }
+                } else {
+                  setFeedback('');
+                  setUserAnswer('');
+                  generateQuestion();
+                }
+              }, 1200);
+            } else {
+              if (powerUp !== 'SHIELD') {
+                setHeroHealth(heroHealth - 1);
+              } else {
+                setPowerUp(null);
+              }
+              
+              setCombo(0);
+              setFeedback('incorrect');
+              setShowAnimation('MISS');
+              setShakeScreen(true);
+              setTimeLeft(15);
+              createParticles('incorrect');
+              
+              setTimeout(() => {
+                setShakeScreen(false);
+                setShowAnimation('');
+                if (heroHealth - 1 <= 0 && powerUp !== 'SHIELD') {
+                  setGameState('game-over');
+                } else {
+                  setFeedback('');
+                  setUserAnswer('');
+                  generateQuestion();
+                }
+              }, 1200);
+            }
+          };
+
+          const usePowerUp = (type) => {
+            if (type === 'TIME') {
+              setTimeLeft(timeLeft + 10);
+              setPowerUp(null);
+            }
+          };
+
+          const handleKeyPress = (e) => {
+            if (e.key === 'Enter' && userAnswer !== '' && feedback === '') {
+              checkAnswer();
+            }
+          };
+
+          return (
+            <div className={`min-h-screen bg-gradient-to-b from-blue-900 via-purple-900 to-black p-4 ${shakeScreen ? 'shake' : ''}`}>
+              <div className="max-w-4xl mx-auto">
+                
+                {/* Particles */}
+                {particles.map(p => (
+                  <div
+                    key={p.id}
+                    className="fixed text-4xl explode pointer-events-none"
+                    style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                  >
+                    {p.emoji}
+                  </div>
+                ))}
+
+                {gameState === 'hero-select' && (
+                  <div className="text-center slide-in">
+                    <h1 className="text-6xl font-black text-yellow-400 mb-4 drop-shadow-lg float" style={{textShadow: '4px 4px 0px rgba(0,0,0,0.5)'}}>
+                      ⚡ HERO MATH BATTLE ⚡
+                    </h1>
+                    <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-3xl p-8 border-4 border-yellow-400">
+                      <h2 className="text-4xl font-bold text-white mb-8">CHOOSE YOUR HERO!</h2>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {heroes.map((hero, idx) => (
+                          <button
+                            key={hero.name}
+                            onClick={() => selectHero(hero)}
+                            className="bg-gradient-to-br from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white p-6 rounded-2xl transform hover:scale-110 transition-all duration-200 border-4 border-yellow-400 shadow-2xl slide-in"
+                            style={{ animationDelay: `${idx * 0.1}s` }}
+                          >
+                            <div className="text-6xl mb-3 float" style={{ animationDelay: `${idx * 0.2}s` }}>{hero.emoji}</div>
+                            <div className="font-black text-xl">{hero.name}</div>
+                            <div className="text-sm text-yellow-300 font-bold">{hero.universe}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {gameState === 'battle' && currentQuestion && (
+                  <div className="slide-in">
+                    <div className="bg-yellow-400 border-8 border-black rounded-t-3xl p-4 mb-0">
+                      <div className="flex justify-between items-center">
+                        <div className="text-2xl font-black">LEVEL {level}</div>
+                        <h1 className="text-4xl md:text-5xl font-black text-center flex-1" style={{textShadow: '3px 3px 0px rgba(0,0,0,0.3)'}}>
+                          {selectedHero.name} VS {villain.name}
+                        </h1>
+                        <div className={`text-3xl font-black ${timeLeft <= 5 ? 'text-red-600 pulse-glow' : 'text-black'}`}>
+                          ⏱️ {timeLeft}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-b from-red-600 to-orange-600 border-x-8 border-black p-4 md:p-8 relative overflow-hidden">
+                      {showAnimation && (
+                        <div className="absolute inset-0 flex items-center justify-center z-20">
+                          <div className={`text-7xl md:text-9xl font-black ${
+                            showAnimation === 'POW' || showAnimation === 'COMBO!' ? 'text-yellow-300' : 'text-gray-400'
+                          }`} style={{
+                            textShadow: '6px 6px 0px rgba(0,0,0,0.5)',
+                            animation: 'explode 0.6s ease-out'
+                          }}>
+                            {showAnimation}!
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-2 gap-4 md:gap-8 mb-6 md:mb-8 relative z-10">
+                        <div className="bg-white bg-opacity-90 rounded-3xl p-4 md:p-6 border-4 border-black">
+                          <div className="text-5xl md:text-7xl mb-2 md:mb-3 text-center">{selectedHero.emoji}</div>
+                          <div className="font-black text-lg md:text-2xl text-center mb-2">{selectedHero.name}</div>
+                          <div className="flex justify-center gap-1 mb-2">
+                            {[...Array(3)].map((_, i) => (
+                              <div key={i} className={`w-6 h-6 md:w-8 md:h-8 ${i < heroHealth ? 'text-2xl' : 'text-gray-400'}`}>
+                                {i < heroHealth ? '❤️' : '🖤'}
+                              </div>
+                            ))}
+                          </div>
+                          {combo > 0 && (
+                            <div className="text-center text-base md:text-lg font-bold text-orange-600 pulse-glow">
+                              🔥 COMBO: {combo}x
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="bg-black bg-opacity-80 rounded-3xl p-4 md:p-6 border-4 border-red-600">
+                          <div className="text-5xl md:text-7xl mb-2 md:mb-3 text-center">{villain.emoji}</div>
+                          <div className="font-black text-lg md:text-2xl text-center mb-2 text-red-400">{villain.name}</div>
+                          <div className="text-center text-xs md:text-sm text-gray-300 italic mb-2 md:mb-3">"{villain.taunt}"</div>
+                          <div className="flex gap-1 justify-center flex-wrap">
+                            {[...Array(isBoss ? 10 : 5)].map((_, i) => (
+                              <div key={i} className={`w-4 h-4 md:w-6 md:h-6 rounded ${
+                                i < villainHealth ? 'bg-red-500' : 'bg-gray-600'
+                              }`}>
+                                {i < villainHealth && <span className="text-xs md:text-base">❤️</span>}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Power-ups */}
+                      {powerUp && (
+                        <div className="mb-4 text-center">
+                          <button
+                            onClick={() => usePowerUp(powerUp)}
+                            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-black border-4 border-yellow-300 pulse-glow hover:scale-110 transition-transform"
+                          >
+                            {powerUp === 'DOUBLE' && '⚡ DOUBLE DAMAGE!'}
+                            {powerUp === 'SHIELD' && '🛡️ SHIELD ACTIVE!'}
+                            {powerUp === 'TIME' && '⏰ +10 SECONDS! (Click)'}
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="bg-yellow-300 rounded-3xl p-4 md:p-8 border-8 border-black relative">
+                        <div className="absolute -top-4 md:-top-6 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 md:px-6 py-1 md:py-2 rounded-full border-4 border-black font-black text-sm md:text-lg whitespace-nowrap">
+                          SOLVE TO ATTACK!
+                        </div>
+                        
+                        <div className="text-center mt-2 md:mt-4">
+                          <div className="text-4xl md:text-7xl font-black mb-4 md:mb-6 text-black">
+                            {currentQuestion.num1} {currentQuestion.symbol} {currentQuestion.num2} = ?
+                          </div>
+
+                          <input
+                            type="number"
+                            value={userAnswer}
+                            onChange={(e) => setUserAnswer(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            disabled={feedback !== ''}
+                            className="text-4xl md:text-6xl font-black text-center border-8 border-black rounded-2xl p-2 md:p-4 w-48 md:w-80 focus:border-blue-600 focus:outline-none disabled:bg-gray-300 bg-white"
+                            placeholder="?"
+                            autoFocus
+                          />
+
+                          {feedback === '' ? (
+                            <button
+                              onClick={checkAnswer}
+                              disabled={userAnswer === ''}
+                              className="mt-4 md:mt-6 bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 md:px-12 py-3 md:py-6 rounded-2xl text-xl md:text-3xl font-black border-4 md:border-6 border-black hover:scale-110 transition-transform disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl"
+                              style={{textShadow: '2px 2px 0px rgba(0,0,0,0.3)'}}
+                            >
+                              💥 {selectedHero.power.toUpperCase()}!
+                            </button>
+                          ) : (
+                            <div className={`mt-4 md:mt-6 py-4 md:py-6 rounded-2xl text-2xl md:text-4xl font-black border-4 md:border-6 border-black ${
+                              feedback === 'correct' 
+                                ? 'bg-green-400 text-white' 
+                                : feedback === 'timeout'
+                                ? 'bg-orange-500 text-white'
+                                : 'bg-gray-400 text-white'
+                            }`} style={{textShadow: '3px 3px 0px rgba(0,0,0,0.3)'}}>
+                              {feedback === 'correct' && '⚡ DIRECT HIT!'}
+                              {feedback === 'incorrect' && `❌ MISSED! Answer: ${currentQuestion.answer}`}
+                              {feedback === 'timeout' && '⏰ TIME\'S UP!'}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-yellow-400 border-8 border-black border-t-0 rounded-b-3xl p-2"></div>
+                  </div>
+                )}
+
+                {gameState === 'level-complete' && (
+                  <div className="text-center slide-in">
+                    <div className="bg-gradient-to-b from-green-400 to-blue-400 rounded-3xl p-8 md:p-12 border-8 border-black">
+                      <div className="text-6xl md:text-8xl mb-6 float">🎉</div>
+                      <h1 className="text-4xl md:text-6xl font-black text-white mb-4" style={{textShadow: '4px 4px 0px rgba(0,0,0,0.5)'}}>
+                        LEVEL {level} COMPLETE!
+                      </h1>
+                      <div className="text-2xl md:text-4xl font-bold text-white mb-8">
+                        {villain.name} defeated!
+                      </div>
+                      
+                      <div className="flex gap-4 justify-center flex-wrap">
+                        <button
+                          onClick={() => startNewLevel(level + 1, false)}
+                          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-2xl text-xl md:text-2xl font-black border-4 border-black hover:scale-110 transition-transform"
+                        >
+                          ⬆️ NEXT LEVEL
+                        </button>
+                        {level % 3 === 0 && (
+                          <button
+                            onClick={() => startNewLevel(level, true)}
+                            className="bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-2xl text-xl md:text-2xl font-black border-4 border-yellow-300 hover:scale-110 transition-transform pulse-glow"
+                          >
+                            👊 BOSS BATTLE!
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {gameState === 'victory' && (
+                  <div className="text-center slide-in">
+                    <div className="bg-gradient-to-b from-yellow-400 to-orange-400 rounded-3xl p-8 md:p-12 border-8 border-black">
+                      <div className="text-6xl md:text-8xl mb-6 animate-bounce">🏆</div>
+                      <h1 className="text-4xl md:text-6xl font-black text-black mb-4" style={{textShadow: '4px 4px 0px rgba(255,255,255,0.5)'}}>
+                        BOSS DEFEATED!
+                      </h1>
+                      <div className="text-2xl md:text-4xl font-bold text-black mb-8">
+                        {selectedHero.name} is victorious!
+                      </div>
+                      
+                      <div className="bg-white bg-opacity-90 rounded-2xl p-6 md:p-8 mb-8 border-4 border-black">
+                        <div className="text-4xl md:text-6xl font-black text-blue-600 mb-2">
+                          Level {level} Champion!
+                        </div>
+                        <div className="text-xl md:text-2xl font-bold text-gray-700">
+                          🌟 LEGENDARY VICTORY!
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 justify-center flex-wrap">
+                        <button
+                          onClick={() => setGameState('hero-select')}
+                          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-2xl text-xl md:text-2xl font-black border-4 border-black hover:scale-110 transition-transform"
+                        >
+                          🦸 NEW GAME
+                        </button>
+                        <button
+                          onClick={() => startNewLevel(level + 1, false)}
+                          className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-2xl text-xl md:text-2xl font-black border-4 border-black hover:scale-110 transition-transform"
+                        >
+                          ⬆️ CONTINUE
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {gameState === 'game-over' && (
+                  <div className="text-center slide-in">
+                    <div className="bg-gradient-to-b from-gray-700 to-black rounded-3xl p-8 md:p-12 border-8 border-red-600">
+                      <div className="text-6xl md:text-8xl mb-6">💀</div>
+                      <h1 className="text-4xl md:text-6xl font-black text-red-500 mb-4">
+                        DEFEATED!
+                      </h1>
+                      <div className="text-xl md:text-2xl font-bold text-white mb-8">
+                        Made it to Level {level}
+                      </div>
+                      
+                      <div className="flex gap-4 justify-center flex-wrap">
+                        <button
+                          onClick={() => startNewLevel(1, false)}
+                          className="bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-2xl text-xl md:text-2xl font-black border-4 border-black hover:scale-110 transition-transform"
+                        >
+                          🔄 TRY AGAIN
+                        </button>
+                        <button
+                          onClick={() => setGameState('hero-select')}
+                          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-2xl text-xl md:text-2xl font-black border-4 border-black hover:scale-110 transition-transform"
+                        >
+                          🦸 CHANGE HERO
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        }
+
+        ReactDOM.render(<SuperheroMathGame />, document.getElementById('root'));
+    </script>
+</body>
+</html>
