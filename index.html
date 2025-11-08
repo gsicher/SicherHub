@@ -1,1105 +1,594 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Superhero Math Battle</title>
-
-    <!-- Load Tailwind CSS -->
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-
-
-    <!-- Configure Tailwind for custom colors and font -->
-
-    <style>
-
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-
-        :root {
-
-            font-family: 'Inter', sans-serif;
-
-        }
-
-
-
-        /* --- CSS Keyframe Definitions (Pure CSS Animations) --- */
-
-        @keyframes shake {
-
-            0%, 100% { transform: translateX(0); }
-
-            25% { transform: translateX(-10px) rotate(-5deg); }
-
-            75% { transform: translateX(10px) rotate(5deg); }
-
-        }
-
-        @keyframes explode {
-
-            0% { transform: scale(0) rotate(0deg); opacity: 1; }
-
-            50% { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
-
-            100% { transform: scale(3) rotate(360deg); opacity: 0; }
-
-        }
-
-        @keyframes pulse-glow {
-
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); }
-
-            50% { box-shadow: 0 0 40px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 255, 0, 0.6); }
-
-        }
-
-        @keyframes slide-in {
-
-            from { opacity: 0; }
-
-            to { opacity: 1; }
-
-        }
-
-        @keyframes float {
-
-            0%, 100% { transform: translateY(0px); }
-
-            50% { transform: translateY(-10px); }
-
-        }
-
-        .shake { animation: shake 0.5s; }
-
-        .explode { animation: explode 0.6s ease-out; }
-
-        .pulse-glow { animation: pulse-glow 1s infinite; }
-
-        .slide-in { animation: slide-in 0.5s; }
-
-        .float { animation: float 2s ease-in-out infinite; }
-
-    </style>
-
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #5a5a5a; -webkit-text-stroke: #5a5a5a}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #570002; -webkit-text-stroke: #570002}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #f6000b; -webkit-text-stroke: #f6000b}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #0000ff; -webkit-text-stroke: #0000ff}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; -webkit-text-stroke: #000000}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #3c3f43; -webkit-text-stroke: #3c3f43}
+    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; -webkit-text-stroke: #000000; min-height: 16.0px}
+    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #175f20; -webkit-text-stroke: #175f20}
+    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #0b2981; -webkit-text-stroke: #0b2981}
+    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #175f20; -webkit-text-stroke: #175f20; min-height: 16.0px}
+    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none; background-color: #e7edf5}
+    span.s2 {font-kerning: none; color: #f6000b; background-color: #e7edf5; -webkit-text-stroke: 0px #f6000b}
+    span.s3 {font-kerning: none; color: #1f1f1f; background-color: #e7edf5; -webkit-text-stroke: 0px #1f1f1f}
+    span.s4 {font-kerning: none; background-color: #e7edf5; -webkit-text-stroke: 0px #000000}
+    span.s5 {font-kerning: none; color: #0000ff; background-color: #e7edf5; -webkit-text-stroke: 0px #0000ff}
+    span.s6 {font-kerning: none; color: #570002; background-color: #e7edf5; -webkit-text-stroke: 0px #570002}
+    span.s7 {font-kerning: none}
+    span.s8 {font-kerning: none; color: #5a00b6; background-color: #e7edf5; -webkit-text-stroke: 0px #5a00b6}
+    span.s9 {font-kerning: none; color: #0b2981; background-color: #e7edf5; -webkit-text-stroke: 0px #0b2981}
+    span.s10 {font-kerning: none; color: #175f20; background-color: #e7edf5; -webkit-text-stroke: 0px #175f20}
+    span.s11 {font-kerning: none; color: #156536; background-color: #e7edf5; -webkit-text-stroke: 0px #156536}
+    span.s12 {font-kerning: none; color: #125c5a; background-color: #e7edf5; -webkit-text-stroke: 0px #125c5a}
+    span.s13 {font-kerning: none; color: #91330c; background-color: #e7edf5; -webkit-text-stroke: 0px #91330c}
+    span.s14 {font-kerning: none; color: #3c3f43; background-color: #e7edf5; -webkit-text-stroke: 0px #3c3f43}
+  </style>
 </head>
-
-<body class="bg-gradient-to-b from-blue-900 via-purple-900 to-black min-h-screen p-4">
-
-    <div id="game-root">
-
-        <!-- Game content will render here -->
-
-    </div>
-
-    
-
-    <!-- Animation Overlay for POW/MISS effects -->
-
-    <div id="animation-overlay" class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-
-        <div></div>
-
-    </div>
-
-
-
-    <script>
-
-        // --- DATA ---
-
-        const heroes = [
-
-            { name: 'Batman', color: 'bg-gray-700', IconText: 'B', IconClass: 'text-white text-6xl font-black', power: 'Batarang', universe: 'DC' },
-
-            { name: 'Superman', color: 'bg-blue-600', IconText: 'S', IconClass: 'text-yellow-400 text-6xl font-black', power: 'Heat Vision', universe: 'DC' },
-
-            { name: 'The Flash', color: 'bg-red-600', IconText: 'F', IconClass: 'text-yellow-300 text-6xl font-black', power: 'Speed Punch', universe: 'DC' },
-
-            { name: 'Wonder Woman', color: 'bg-yellow-500', IconText: 'W', IconClass: 'text-red-700 text-6xl font-black', power: 'Lasso', universe: 'DC' },
-
-            { name: 'Spider-Man', color: 'bg-red-700', IconText: 'S', IconClass: 'text-blue-500 text-6xl font-black', power: 'Web Shooter', universe: 'Marvel' },
-
-            { name: 'Iron Man', color: 'bg-red-800', IconText: 'I', IconClass: 'text-yellow-400 text-6xl font-black', power: 'Repulsor Blast', universe: 'Marvel' },
-
-        ];
-
-
-
-        const villains = [
-
-            { name: 'Green Goblin', emoji: '👺', taunt: 'You\'ll never catch me!', universe: 'Marvel' },
-
-            { name: 'Joker', emoji: '🃏', taunt: 'Let\'s put a smile on that face!', universe: 'DC' },
-
-            { name: 'Venom', emoji: '👾', taunt: 'We are Venom!', universe: 'Marvel' },
-
-            { name: 'Penguin', emoji: '🐧', taunt: 'Wak wak wak!', universe: 'DC' },
-
-            { name: 'Mysterio', emoji: '🎭', taunt: 'It\'s all an illusion!', universe: 'Marvel' }
-
-        ];
-
-
-
-        const bossVillains = [
-
-            { name: 'THANOS', emoji: '👊', taunt: 'I am inevitable!', universe: 'Marvel', isBoss: true },
-
-            { name: 'DARKSEID', emoji: '👹', taunt: 'Kneel before Darkseid!', universe: 'DC', isBoss: true },
-
-            { name: 'ULTRON', emoji: '🤖', taunt: 'There are no strings on me!', universe: 'Marvel', isBoss: true }
-
-        ];
-
-
-
-        // --- GAME STATE (Global Variables) ---
-
-        let gameState = 'hero-select';
-
-        let selectedHero = null;
-
-        let villain = null;
-
-        let score = 0;
-
-        let villainHealth = 5;
-
-        let heroHealth = 3;
-
-        let currentQuestion = null;
-
-        let combo = 0;
-
-        let powerUp = null;
-
-        let isBoss = false;
-
-        let level = 1;
-
-
-
-        const rootElement = document.getElementById('game-root');
-
-        
-
-        // --- UTILITIES ---
-
-
-
-        function generateQuestion(currentLevel, isBossMode) {
-
-            const difficulty = isBossMode ? 'hard' : currentLevel <= 1 ? 'easy' : currentLevel <= 3 ? 'medium' : 'hard';
-
-            
-
-            const operations = [
-
-                { type: 'add', symbol: '+', generate: (max) => {
-
-                    const num1 = Math.floor(Math.random() * max) + 5;
-
-                    const num2 = Math.floor(Math.random() * max) + 5;
-
-                    return { num1, num2, answer: num1 + num2 };
-
-                }},
-
-                { type: 'subtract', symbol: '-', generate: (max) => {
-
-                    const num1 = Math.floor(Math.random() * max) + 15;
-
-                    const num2 = Math.floor(Math.random() * num1) + 1;
-
-                    return { num1, num2, answer: num1 - num2 };
-
-                }},
-
-                { type: 'multiply', symbol: '×', generate: (max) => {
-
-                    const num1 = Math.floor(Math.random() * 9) + 2;
-
-                    const num2 = Math.floor(Math.random() * 9) + 2;
-
-                    // Introduce division sometimes in medium/hard mode
-
-                    if (difficulty !== 'easy' && Math.random() > 0.7) { 
-
-                        const divisor = Math.floor(Math.random() * 9) + 2;
-
-                        const quotient = Math.floor(Math.random() * 10) + 2;
-
-                        return { num1: divisor * quotient, num2: divisor, symbol: '÷', answer: quotient, type: 'divide' };
-
-                    }
-
-                    return { num1, num2, answer: num1 * num2 };
-
-                }}
-
-            ];
-
-
-
-            // Determine max number range based on difficulty
-
-            let maxRange = 10;
-
-            if (difficulty === 'medium') maxRange = 12;
-
-            if (difficulty === 'hard') maxRange = 15;
-
-            if (isBossMode) maxRange = 20;
-
-
-
-            const op = operations[Math.floor(Math.random() * operations.length)];
-
-            
-
-            // Generate using the max range relevant to the operation
-
-            return { ...op.generate(maxRange), symbol: op.symbol, type: op.type };
-
-        }
-
-        
-
-        function updateUI() {
-
-            // Guard clause to prevent rendering before root element is available
-
-            if (!rootElement) return;
-
-
-
-            rootElement.innerHTML = renderContent();
-
-            // Re-attach event listeners after rendering (crucial for vanilla JS)
-
-            attachEventListeners();
-
-
-
-            // Focus the input field if we are in battle and ready for input
-
-            if (gameState === 'battle') {
-
-                const input = document.getElementById('answer-input');
-
-                if (input) {
-
-                    input.focus();
-
-                }
-
-            }
-
-        }
-
-
-
-        function attachEventListeners() {
-
-            if (gameState === 'hero-select') {
-
-                document.querySelectorAll('.hero-select-button').forEach(button => {
-
-                    button.onclick = (e) => selectHero(e.currentTarget.dataset.heroName);
-
-                });
-
-            } else if (gameState === 'battle') {
-
-                const attackButton = document.getElementById('attack-button');
-
-                if (attackButton) attackButton.onclick = checkAnswer;
-
-                
-
-                const answerInput = document.getElementById('answer-input');
-
-                if (answerInput) {
-
-                    answerInput.onkeyup = (e) => {
-
-                        if (e.key === 'Enter') checkAnswer();
-
-                    };
-
-                }
-
-            } else if (gameState === 'level-complete') {
-
-                const nextButton = document.getElementById('next-level-button');
-
-                if (nextButton) nextButton.onclick = () => startNewLevel(level + 1, false);
-
-                
-
-                const bossButton = document.getElementById('boss-battle-button');
-
-                if (bossButton) bossButton.onclick = () => startNewLevel(level, true);
-
-            } else if (gameState === 'victory' || gameState === 'game-over') {
-
-                const newGameButton = document.getElementById('new-game-button');
-
-                if (newGameButton) newGameButton.onclick = () => { gameState = 'hero-select'; updateUI(); };
-
-                
-
-                const tryAgainButton = document.getElementById('try-again-button');
-
-                if (tryAgainButton) tryAgainButton.onclick = () => startNewLevel(level, isBoss);
-
-                
-
-                const continueButton = document.getElementById('continue-button');
-
-                if (continueButton) continueButton.onclick = () => startNewLevel(level + 1, false);
-
-                
-
-                const changeHeroButton = document.getElementById('change-hero-button');
-
-                if (changeHeroButton) changeHeroButton.onclick = () => { gameState = 'hero-select'; updateUI(); };
-
-            }
-
-        }
-
-
-
-        // --- GAME LOGIC FUNCTIONS ---
-
-
-
-        function startNewLevel(newLevel, boss) {
-
-            level = newLevel;
-
-            isBoss = boss;
-
-            
-
-            const opponentVillains = boss ? bossVillains : villains;
-
-            const fallbackVillains = boss ? bossVillains : villains;
-
-            
-
-            // Select a villain from the opposite universe if possible
-
-            const opponentOptions = opponentVillains.filter(v => v.universe !== selectedHero.universe);
-
-            
-
-            villain = opponentOptions.length > 0 
-
-                ? opponentOptions[Math.floor(Math.random() * opponentOptions.length)]
-
-                : fallbackVillains[Math.floor(Math.random() * fallbackVillains.length)];
-
-            
-
-            villainHealth = boss ? 10 : 5;
-
-            heroHealth = 3;
-
-            combo = 0;
-
-            powerUp = null;
-
-            currentQuestion = generateQuestion(newLevel, boss);
-
-            gameState = 'battle';
-
-            
-
-            updateUI();
-
-        }
-
-
-
-        function selectHero(heroName) {
-
-            selectedHero = heroes.find(h => h.name === heroName);
-
-            // Start game immediately after selection
-
-            startNewLevel(1, false); 
-
-        }
-
-
-
-        function triggerAnimation(animationType, callback) {
-
-            const animationOverlay = document.getElementById('animation-overlay');
-
-            const root = document.querySelector('body');
-
-            
-
-            if (animationOverlay) {
-
-                // Clear previous animation classes
-
-                const animationText = animationOverlay.querySelector('div');
-
-                
-
-                // Set animation text properties
-
-                if (animationType === 'COMBO!') {
-
-                    animationText.className = `text-7xl md:text-9xl font-black text-yellow-300 explode pulse-glow`;
-
-                    animationText.textContent = 'COMBO!';
-
-                } else if (animationType === 'POW') {
-
-                    animationText.className = `text-7xl md:text-9xl font-black text-red-500 explode`;
-
-                    animationText.textContent = 'POW!';
-
-                } else if (animationType === 'MISS') {
-
-                    animationText.className = `text-7xl md:text-9xl font-black text-gray-400 explode`;
-
-                    animationText.textContent = 'MISS!';
-
-                }
-
-
-
-                // Trigger shake if damage taken
-
-                if (animationType === 'MISS') {
-
-                    if (root) root.classList.add('shake');
-
-                }
-
-            }
-
-
-
-            // Wait for animation duration then proceed
-
-            setTimeout(() => {
-
-                if (animationOverlay) {
-
-                    animationOverlay.querySelector('div').textContent = '';
-
-                    animationOverlay.querySelector('div').className = ''; // Clear classes
-
-                }
-
-                if (root) root.classList.remove('shake');
-
-                callback();
-
-            }, 800); // Shorter duration for smoother gameplay
-
-        }
-
-
-
-        function checkAnswer() {
-
-            const input = document.getElementById('answer-input');
-
-            const feedbackBox = document.getElementById('feedback-box');
-
-            
-
-            if (!input || !feedbackBox || input.value === '' || isNaN(parseInt(input.value, 10))) {
-
-                // If input is empty or invalid, just return without error
-
-                return;
-
-            }
-
-
-
-            const submittedAnswer = parseInt(input.value, 10);
-
-            const correct = submittedAnswer === currentQuestion.answer;
-
-            
-
-            // Disable input and button while feedback is showing
-
-            input.disabled = true;
-
-            document.getElementById('attack-button').disabled = true;
-
-            
-
-            let animationText = '';
-
-            let finalVillainHealth = villainHealth;
-
-            let finalHeroHealth = heroHealth;
-
-
-
-            if (correct) {
-
-                score++;
-
-                combo++;
-
-                animationText = combo > 1 ? 'COMBO!' : 'POW';
-
-                
-
-                let damage = 1;
-
-                if (combo >= 3) damage += 1; // 3-hit combo grants bonus damage
-
-                let finalDamage = damage;
-
-
-
-                if (powerUp === 'DOUBLE') {
-
-                    finalDamage *= 2;
-
-                    powerUp = null; // Power up consumed
-
-                }
-
-                finalVillainHealth = villainHealth - finalDamage;
-
-
-
-                feedbackBox.className = 'mt-4 md:mt-6 py-4 md:py-6 rounded-2xl text-2xl md:text-4xl font-black border-4 md:border-6 border-black shadow-xl bg-green-600 text-white slide-in';
-
-                feedbackBox.innerHTML = `⚡ DIRECT HIT! -${finalDamage} HP`;
-
-                
-
-            } else {
-
-                combo = 0;
-
-                animationText = 'MISS';
-
-                
-
-                let damageTaken = 1;
-
-                let damageText = '-1 HP';
-
-                
-
-                if (powerUp === 'SHIELD') {
-
-                    damageTaken = 0;
-
-                    powerUp = null; // Power up consumed
-
-                    damageText = 'SHIELD ACTIVATED!';
-
-                }
-
-                finalHeroHealth = heroHealth - damageTaken;
-
-
-
-                feedbackBox.className = 'mt-4 md:mt-6 py-4 md:py-6 rounded-2xl text-2xl md:text-4xl font-black border-4 md:border-6 border-black shadow-xl bg-gray-600 text-white slide-in';
-
-                feedbackBox.innerHTML = `❌ MISSED! ${damageText} (Answer: ${currentQuestion.answer})`;
-
-            }
-
-
-
-            // Update state variables after calculations but before animation callback
-
-            villainHealth = finalVillainHealth;
-
-            heroHealth = finalHeroHealth;
-
-            
-
-            triggerAnimation(animationText, () => {
-
-                // Check win/loss conditions
-
-                if (villainHealth <= 0) {
-
-                    gameState = isBoss ? 'victory' : 'level-complete';
-
-                } else if (heroHealth <= 0) {
-
-                    gameState = 'game-over';
-
-                } else {
-
-                    // Continue battle
-
-                    currentQuestion = generateQuestion(level, isBoss);
-
-                    // 1 in 4 chance to find a power-up if one isn't active and not in boss mode
-
-                    if (!powerUp && Math.random() < 0.25 && !isBoss) {
-
-                        const powerUpsList = ['DOUBLE', 'SHIELD'];
-
-                        powerUp = powerUpsList[Math.floor(Math.random() * powerUpsList.length)];
-
-                    }
-
-                }
-
-                
-
-                // Clear input and re-enable for next round (or transition to next state)
-
-                input.value = '';
-
-                input.disabled = false;
-
-                document.getElementById('attack-button').disabled = false;
-
-                
-
-                // Remove feedback text class immediately to re-hide it before next action
-
-                feedbackBox.className = 'mt-4 py-4 rounded-2xl text-2xl font-black text-white invisible';
-
-                
-
-                updateUI(); // Re-render the game state
-
-            });
-
-        }
-
-
-
-        // --- RENDER HTML TEMPLATES ---
-
-
-
-        function renderHealthBar(current, max, color) {
-
-            const percentage = Math.max(0, (current / max) * 100);
-
-            return `
-
-                <div class="h-4 md:h-6 w-full bg-gray-300 rounded-full overflow-hidden shadow-inner">
-
-                    <div class="h-full ${color} transition-all duration-300 ease-out rounded-full" style="width: ${percentage}%;"></div>
-
-                </div>
-
-                <div class="text-xs md:text-sm font-semibold mt-1 text-white">${Math.max(0, current)} / ${max} HP</div>
-
-            `;
-
-        }
-
-        
-
-        function renderHeroSelect() {
-
-            return `
-
-                <div class="max-w-4xl mx-auto p-4 md:p-8 bg-white/10 backdrop-blur-sm rounded-3xl shadow-2xl text-center slide-in">
-
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-yellow-300 mb-6 border-b-4 border-yellow-500 pb-2">CHOOSE YOUR HERO</h1>
-
-                    <p class="text-white mb-8 text-lg md:text-xl">Select a legendary hero to battle the forces of math crime across the multiverse!</p>
-
-                    
-
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
-
-                        ${heroes.map(hero => `
-
-                            <button class="hero-select-button ${hero.color} p-4 md:p-6 rounded-xl hover:shadow-xl transition duration-200 transform hover:scale-105 border-4 border-white/50" data-hero-name="${hero.name}">
-
-                                <div class="w-20 h-20 mx-auto rounded-full bg-black flex items-center justify-center mb-3 shadow-lg">
-
-                                    <span class="${hero.IconClass}">${hero.IconText}</span>
-
-                                </div>
-
-                                <h2 class="text-xl md:text-2xl font-bold text-white">${hero.name}</h2>
-
-                                <p class="text-sm md:text-base text-gray-300">${hero.power}</p>
-
-                            </button>
-
-                        `).join('')}
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-
-
-
-        function renderBattleScreen() {
-
-            const maxHeroHealth = 3;
-
-            const maxVillainHealth = isBoss ? 10 : 5;
-
-            const heroIconClass = selectedHero.IconClass.replace('text-6xl', 'text-4xl md:text-6xl');
-
-
-
-            // Determine difficulty label
-
-            let difficultyText = '';
-
-            if (level === 1) difficultyText = 'EASY';
-
-            else if (level <= 3) difficultyText = 'MEDIUM';
-
-            else difficultyText = 'HARD';
-
-            if (isBoss) difficultyText = 'BOSS BATTLE!';
-
-
-
-            return `
-
-                <div class="max-w-4xl mx-auto p-4 md:p-8 bg-white/10 backdrop-blur-sm rounded-3xl shadow-2xl text-white slide-in">
-
-                    <div class="text-center mb-4">
-
-                        <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-300">Level ${level} - ${difficultyText}</h1>
-
-                        <p class="text-xl text-gray-300">Score: ${score} | Combo: ${combo}</p>
-
-                    </div>
-
-
-
-                    <!-- Character Stats -->
-
-                    <div class="flex justify-between items-start mb-6">
-
-                        
-
-                        <!-- Hero Card -->
-
-                        <div class="w-1/2 p-2 md:p-4 bg-blue-800/50 rounded-xl shadow-lg mr-2 border-2 border-blue-400">
-
-                            <div class="flex items-center">
-
-                                <div class="w-10 h-10 md:w-16 md:h-16 rounded-full bg-black flex items-center justify-center mr-3 float">
-
-                                    <span class="${heroIconClass}">${selectedHero.IconText}</span>
-
-                                </div>
-
-                                <div>
-
-                                    <h2 class="text-xl md:text-2xl font-bold">${selectedHero.name}</h2>
-
-                                    ${renderHealthBar(heroHealth, maxHeroHealth, 'bg-green-500')}
-
-                                </div>
-
-                            </div>
-
-                            <div class="mt-2 text-sm text-gray-300">
-
-                                ${powerUp ? `<span class="inline-block bg-yellow-500 text-black px-2 py-1 rounded-full font-bold text-xs pulse-glow">POWER UP: ${powerUp}</span>` : ''}
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- Villain Card -->
-
-                        <div class="w-1/2 p-2 md:p-4 bg-red-800/50 rounded-xl shadow-lg ml-2 border-2 border-red-400 text-right">
-
-                            <div class="flex items-center justify-end">
-
-                                <div>
-
-                                    <h2 class="text-xl md:text-2xl font-bold">${villain.name}</h2>
-
-                                    ${renderHealthBar(villainHealth, maxVillainHealth, 'bg-red-500')}
-
-                                </div>
-
-                                <div class="w-10 h-10 md:w-16 md:h-16 text-4xl md:text-6xl flex items-center justify-center ml-3 float">
-
-                                    ${villain.emoji}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <!-- Battle Action Area -->
-
-                    <div class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-xl text-center">
-
-                        <p class="text-xl md:text-2xl italic text-gray-400 mb-4">"${villain.taunt}"</p>
-
-                        
-
-                        <!-- Question Box -->
-
-                        <div class="bg-yellow-400 text-black p-4 md:p-6 rounded-xl mb-6 shadow-2xl">
-
-                            <p class="text-4xl md:text-6xl font-black">${currentQuestion.num1} ${currentQuestion.symbol} ${currentQuestion.num2} = ?</p>
-
-                        </div>
-
-
-
-                        <!-- Input and Attack -->
-
-                        <div class="flex flex-col md:flex-row gap-4">
-
-                            <input 
-
-                                id="answer-input"
-
-                                type="number" 
-
-                                placeholder="Your answer" 
-
-                                class="flex-grow p-3 md:p-4 text-2xl text-center rounded-xl bg-white text-gray-800 border-4 border-yellow-500 focus:outline-none focus:border-blue-500 transition duration-150"
-
-                                inputmode="numeric"
-
-                            />
-
-                            <button 
-
-                                id="attack-button"
-
-                                class="px-6 py-3 md:py-4 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg transition duration-200 hover:bg-red-700 hover:shadow-xl transform active:scale-95 whitespace-nowrap"
-
-                            >
-
-                                ${selectedHero.power} ATTACK!
-
-                            </button>
-
-                        </div>
-
-                        
-
-                        <!-- Feedback Box -->
-
-                        <!-- Set to invisible by default, will be revealed with correct/incorrect class -->
-
-                        <div id="feedback-box" class="mt-4 py-4 rounded-2xl text-2xl font-black text-white invisible">
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-
-
-
-        function renderLevelComplete() {
-
-            const isMegaBoss = villain.isBoss;
-
-            return `
-
-                <div class="max-w-md mx-auto p-8 bg-green-700/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in">
-
-                    <h1 class="text-5xl font-extrabold text-yellow-300 mb-4">VICTORY!</h1>
-
-                    <p class="text-2xl mb-6">You defeated the ${villain.name}!</p>
-
-                    <p class="text-xl mb-8">Current Score: ${score}</p>
-
-
-
-                    ${isMegaBoss ? `
-
-                        <p class="text-3xl font-bold mb-8">You have conquered the BOSS BATTLE!</p>
-
-                        <button id="new-game-button" class="w-full mb-4 py-3 bg-yellow-500 text-black text-xl font-bold rounded-xl shadow-lg transition hover:bg-yellow-400">
-
-                            START NEW GAME
-
-                        </button>
-
-                        <button id="change-hero-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600">
-
-                            CHOOSE NEW HERO
-
-                        </button>
-
-                    ` : `
-
-                        <button id="next-level-button" class="w-full mb-4 py-3 bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-blue-700">
-
-                            PROCEED TO LEVEL ${level + 1}
-
-                        </button>
-
-                        <button id="boss-battle-button" class="w-full py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-red-700 pulse-glow">
-
-                            CHALLENGE A BOSS NOW!
-
-                        </button>
-
-                    `}
-
-                </div>
-
-            `;
-
-        }
-
-
-
-        function renderGameOver() {
-
-            return `
-
-                <div class="max-w-md mx-auto p-8 bg-red-800/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in">
-
-                    <h1 class="text-5xl font-extrabold text-yellow-300 mb-4">GAME OVER</h1>
-
-                    <p class="text-2xl mb-6">The ${villain.name} overpowered you.</p>
-
-                    <p class="text-xl mb-8">Final Score: ${score}</p>
-
-                    
-
-                    <button id="try-again-button" class="w-full mb-4 py-3 bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-blue-700">
-
-                        RETRY LEVEL ${level}
-
-                    </button>
-
-                    <button id="new-game-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600">
-
-                        START NEW GAME
-
-                    </button>
-
-                </div>
-
-            `;
-
-        }
-
-        
-
-        function renderVictoryScreen() {
-
-             return `
-
-                <div class="max-w-md mx-auto p-8 bg-purple-800/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in">
-
-                    <h1 class="text-5xl font-extrabold text-yellow-300 mb-4">EPIC VICTORY!</h1>
-
-                    <p class="text-2xl mb-6">You have defeated the mighty ${villain.name} and saved the day!</p>
-
-                    <p class="text-xl mb-8">Final Score: ${score}</p>
-
-                    
-
-                    <button id="continue-button" class="w-full mb-4 py-3 bg-green-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-green-700">
-
-                        CONTINUE ADVENTURE (Level ${level + 1})
-
-                    </button>
-
-                    <button id="change-hero-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600">
-
-                        CHOOSE NEW HERO
-
-                    </button>
-
-                </div>
-
-            `;
-
-        }
-
-
-
-        function renderContent() {
-
-            switch (gameState) {
-
-                case 'hero-select':
-
-                    return renderHeroSelect();
-
-                case 'battle':
-
-                    return renderBattleScreen();
-
-                case 'level-complete':
-
-                    return renderLevelComplete();
-
-                case 'game-over':
-
-                    return renderGameOver();
-
-                case 'victory':
-
-                    return renderVictoryScreen();
-
-                default:
-
-                    return renderHeroSelect();
-
-            }
-
-        }
-
-
-
-        // --- INITIALIZATION ---
-
-        // Use DOMContentLoaded to ensure the script runs only after the HTML structure is loaded.
-
-        document.addEventListener('DOMContentLoaded', updateUI);
-
-
-
-    </script>
-
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE</span><span class="s2"> html</span><span class="s1">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;</span><span class="s1">html</span><span class="s4"> </span><span class="s2">lang</span><span class="s3">=</span><span class="s5">"en"</span><span class="s3">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;</span><span class="s1">head</span><span class="s3">&gt;</span></p>
+<p class="p3"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s4"> </span><span class="s1">charset</span><span class="s3">=</span><span class="s5">"UTF-8"</span><span class="s3">&gt;</span></p>
+<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s4"> </span><span class="s2">name</span><span class="s3">=</span><span class="s1">"viewport"</span><span class="s4"> </span><span class="s2">content</span><span class="s3">=</span><span class="s1">"width=device-width, initial-scale=1.0"</span><span class="s3">&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">title</span><span class="s3">&gt;</span><span class="s1">Superhero Math Battle</span><span class="s3">&lt;/</span><span class="s6">title</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Load Tailwind CSS --&gt;</span></p>
+<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s4"> </span><span class="s2">src</span><span class="s3">=</span><span class="s1">"https://cdn.tailwindcss.com"</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Configure Tailwind for custom colors and font --&gt;</span></p>
+<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s1">style</span><span class="s3">&gt;</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s8">@import</span><span class="s4"> </span><span class="s9">url</span><span class="s4">(</span><span class="s1">'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap'</span><span class="s4">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">:root</span><span class="s1"> {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">font-family:</span><span class="s1"> </span><span class="s10">'Inter'</span><span class="s1">, </span><span class="s9">sans-serif</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">/* --- CSS Keyframe Definitions (Pure CSS Animations) --- */</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">@keyframes</span><span class="s1"> </span><span class="s9">shake</span><span class="s1"> {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">0%</span><span class="s1">, </span><span class="s11">100%</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s9">translateX(</span><span class="s11">0</span><span class="s9">)</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">25%</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s9">translateX(</span><span class="s11">-10px</span><span class="s9">)</span><span class="s1"> </span><span class="s9">rotate(</span><span class="s11">-5deg</span><span class="s9">)</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">75%</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s9">translateX(</span><span class="s11">10px</span><span class="s9">)</span><span class="s1"> </span><span class="s9">rotate(</span><span class="s11">5deg</span><span class="s9">)</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">@keyframes</span><span class="s1"> </span><span class="s9">explode</span><span class="s1"> {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">0%</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s9">scale(</span><span class="s11">0</span><span class="s9">)</span><span class="s1"> </span><span class="s9">rotate(</span><span class="s11">0deg</span><span class="s9">)</span><span class="s1">; </span><span class="s2">opacity:</span><span class="s1"> </span><span class="s11">1</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">50%</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s9">scale(</span><span class="s11">1.5</span><span class="s9">)</span><span class="s1"> </span><span class="s9">rotate(</span><span class="s11">180deg</span><span class="s9">)</span><span class="s1">; </span><span class="s2">opacity:</span><span class="s1"> </span><span class="s11">0.8</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">100%</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s9">scale(</span><span class="s11">3</span><span class="s9">)</span><span class="s1"> </span><span class="s9">rotate(</span><span class="s11">360deg</span><span class="s9">)</span><span class="s1">; </span><span class="s2">opacity:</span><span class="s1"> </span><span class="s11">0</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">@keyframes</span><span class="s1"> </span><span class="s9">pulse-glow</span><span class="s1"> {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">0%</span><span class="s1">, </span><span class="s11">100%</span><span class="s1"> { </span><span class="s2">box-shadow:</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">20px</span><span class="s1"> </span><span class="s9">rgba(</span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">0</span><span class="s1">, </span><span class="s11">0.8</span><span class="s9">)</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">50%</span><span class="s1"> { </span><span class="s2">box-shadow:</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">40px</span><span class="s1"> </span><span class="s9">rgba(</span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">0</span><span class="s1">, </span><span class="s11">1</span><span class="s9">)</span><span class="s1">, </span><span class="s11">0</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">60px</span><span class="s1"> </span><span class="s9">rgba(</span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">0</span><span class="s1">, </span><span class="s11">0.6</span><span class="s9">)</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">@keyframes</span><span class="s1"> </span><span class="s9">slide-in</span><span class="s1"> {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s9">from</span><span class="s1"> { </span><span class="s2">opacity:</span><span class="s1"> </span><span class="s11">0</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s9">to</span><span class="s1"> { </span><span class="s2">opacity:</span><span class="s1"> </span><span class="s11">1</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">@keyframes</span><span class="s1"> </span><span class="s9">float</span><span class="s1"> {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">0%</span><span class="s1">, </span><span class="s11">100%</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s9">translateY(</span><span class="s11">0px</span><span class="s9">)</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s11">50%</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s9">translateY(</span><span class="s11">-10px</span><span class="s9">)</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">.shake</span><span class="s1"> { </span><span class="s2">animation:</span><span class="s1"> </span><span class="s9">shake</span><span class="s1"> </span><span class="s11">0.5s</span><span class="s1">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">.explode</span><span class="s1"> { </span><span class="s2">animation:</span><span class="s1"> </span><span class="s9">explode</span><span class="s1"> </span><span class="s11">0.6s</span><span class="s1"> </span><span class="s9">ease-out</span><span class="s1">; }</span></p>
+<p class="p9"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s6">.pulse-glow</span><span class="s4"> { </span><span class="s2">animation:</span><span class="s4"> </span><span class="s1">pulse-glow</span><span class="s4"> </span><span class="s11">1s</span><span class="s4"> </span><span class="s1">infinite</span><span class="s4">; }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">.slide-in</span><span class="s1"> { </span><span class="s2">animation:</span><span class="s1"> </span><span class="s9">slide-in</span><span class="s1"> </span><span class="s11">0.5s</span><span class="s1">; }</span></p>
+<p class="p9"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s6">.float</span><span class="s4"> { </span><span class="s2">animation:</span><span class="s4"> </span><span class="s1">float</span><span class="s4"> </span><span class="s11">2s</span><span class="s4"> </span><span class="s1">ease-in-out</span><span class="s4"> </span><span class="s1">infinite</span><span class="s4">; }</span></p>
+<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">style</span><span class="s3">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;/</span><span class="s1">head</span><span class="s3">&gt;</span></p>
+<p class="p4"><span class="s3">&lt;</span><span class="s6">body</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"bg-gradient-to-b from-blue-900 via-purple-900 to-black min-h-screen p-4"</span><span class="s3">&gt;</span></p>
+<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"game-root"</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;!-- Game content will render here --&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">    </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Animation Overlay for POW/MISS effects --&gt;</span></p>
+<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"animation-overlay"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"absolute inset-0 flex items-center justify-center z-20 pointer-events-none"</span><span class="s3">&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3">&gt;&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s1">script</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- DATA ---</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">const</span><span class="s1"> heroes = [</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">            </span>{ name: </span><span class="s1">'Batman'</span><span class="s4">, color: </span><span class="s1">'bg-gray-700'</span><span class="s4">, </span><span class="s12">IconText</span><span class="s4">: </span><span class="s1">'B'</span><span class="s4">, </span><span class="s12">IconClass</span><span class="s4">: </span><span class="s1">'text-white text-6xl font-black'</span><span class="s4">, power: </span><span class="s1">'Batarang'</span><span class="s4">, universe: </span><span class="s1">'DC'</span><span class="s4"> },</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">            </span>{ name: </span><span class="s1">'Superman'</span><span class="s4">, color: </span><span class="s1">'bg-blue-600'</span><span class="s4">, </span><span class="s12">IconText</span><span class="s4">: </span><span class="s1">'S'</span><span class="s4">, </span><span class="s12">IconClass</span><span class="s4">: </span><span class="s1">'text-yellow-400 text-6xl font-black'</span><span class="s4">, power: </span><span class="s1">'Heat Vision'</span><span class="s4">, universe: </span><span class="s1">'DC'</span><span class="s4"> },</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">            </span>{ name: </span><span class="s1">'The Flash'</span><span class="s4">, color: </span><span class="s1">'bg-red-600'</span><span class="s4">, </span><span class="s12">IconText</span><span class="s4">: </span><span class="s1">'F'</span><span class="s4">, </span><span class="s12">IconClass</span><span class="s4">: </span><span class="s1">'text-yellow-300 text-6xl font-black'</span><span class="s4">, power: </span><span class="s1">'Speed Punch'</span><span class="s4">, universe: </span><span class="s1">'DC'</span><span class="s4"> },</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">            </span>{ name: </span><span class="s1">'Wonder Woman'</span><span class="s4">, color: </span><span class="s1">'bg-yellow-500'</span><span class="s4">, </span><span class="s12">IconText</span><span class="s4">: </span><span class="s1">'W'</span><span class="s4">, </span><span class="s12">IconClass</span><span class="s4">: </span><span class="s1">'text-red-700 text-6xl font-black'</span><span class="s4">, power: </span><span class="s1">'Lasso'</span><span class="s4">, universe: </span><span class="s1">'DC'</span><span class="s4"> },</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">            </span>{ name: </span><span class="s1">'Spider-Man'</span><span class="s4">, color: </span><span class="s1">'bg-red-700'</span><span class="s4">, </span><span class="s12">IconText</span><span class="s4">: </span><span class="s1">'S'</span><span class="s4">, </span><span class="s12">IconClass</span><span class="s4">: </span><span class="s1">'text-blue-500 text-6xl font-black'</span><span class="s4">, power: </span><span class="s1">'Web Shooter'</span><span class="s4">, universe: </span><span class="s1">'Marvel'</span><span class="s4"> },</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">            </span>{ name: </span><span class="s1">'Iron Man'</span><span class="s4">, color: </span><span class="s1">'bg-red-800'</span><span class="s4">, </span><span class="s12">IconText</span><span class="s4">: </span><span class="s1">'I'</span><span class="s4">, </span><span class="s12">IconClass</span><span class="s4">: </span><span class="s1">'text-yellow-400 text-6xl font-black'</span><span class="s4">, power: </span><span class="s1">'Repulsor Blast'</span><span class="s4">, universe: </span><span class="s1">'Marvel'</span><span class="s4"> },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">const</span><span class="s1"> villains = [</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s10">'Green Goblin'</span><span class="s1">, emoji: </span><span class="s10">'👺'</span><span class="s1">, taunt: </span><span class="s10">'You\'ll never catch me!'</span><span class="s1">, universe: </span><span class="s10">'Marvel'</span><span class="s1"> },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s10">'Joker'</span><span class="s1">, emoji: </span><span class="s10">'🃏'</span><span class="s1">, taunt: </span><span class="s10">'Let\'s put a smile on that face!'</span><span class="s1">, universe: </span><span class="s10">'DC'</span><span class="s1"> },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s10">'Venom'</span><span class="s1">, emoji: </span><span class="s10">'👾'</span><span class="s1">, taunt: </span><span class="s10">'We are Venom!'</span><span class="s1">, universe: </span><span class="s10">'Marvel'</span><span class="s1"> },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s10">'Penguin'</span><span class="s1">, emoji: </span><span class="s10">'🐧'</span><span class="s1">, taunt: </span><span class="s10">'Wak wak wak!'</span><span class="s1">, universe: </span><span class="s10">'DC'</span><span class="s1"> },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s10">'Mysterio'</span><span class="s1">, emoji: </span><span class="s10">'🎭'</span><span class="s1">, taunt: </span><span class="s10">'It\'s all an illusion!'</span><span class="s1">, universe: </span><span class="s10">'Marvel'</span><span class="s1"> }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">const</span><span class="s1"> bossVillains = [</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s10">'THANOS'</span><span class="s1">, emoji: </span><span class="s10">'👊'</span><span class="s1">, taunt: </span><span class="s10">'I am inevitable!'</span><span class="s1">, universe: </span><span class="s10">'Marvel'</span><span class="s1">, isBoss: </span><span class="s8">true</span><span class="s1"> },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s10">'DARKSEID'</span><span class="s1">, emoji: </span><span class="s10">'👹'</span><span class="s1">, taunt: </span><span class="s10">'Kneel before Darkseid!'</span><span class="s1">, universe: </span><span class="s10">'DC'</span><span class="s1">, isBoss: </span><span class="s8">true</span><span class="s1"> },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s10">'ULTRON'</span><span class="s1">, emoji: </span><span class="s10">'🤖'</span><span class="s1">, taunt: </span><span class="s10">'There are no strings on me!'</span><span class="s1">, universe: </span><span class="s10">'Marvel'</span><span class="s1">, isBoss: </span><span class="s8">true</span><span class="s1"> }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- GAME STATE (Global Variables) ---</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> gameState = </span><span class="s10">'hero-select'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> selectedHero = </span><span class="s8">null</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> villain = </span><span class="s8">null</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> score = </span><span class="s13">0</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> villainHealth = </span><span class="s13">5</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> heroHealth = </span><span class="s13">3</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> currentQuestion = </span><span class="s8">null</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> combo = </span><span class="s13">0</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> powerUp = </span><span class="s8">null</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> isBoss = </span><span class="s8">false</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">let</span><span class="s1"> level = </span><span class="s13">1</span><span class="s1">;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">const</span><span class="s1"> rootElement = document.getElementById(</span><span class="s10">'game-root'</span><span class="s1">);</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- UTILITIES ---</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> generateQuestion(currentLevel, isBossMode) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> difficulty = isBossMode ? </span><span class="s10">'hard'</span><span class="s1"> : currentLevel &lt;= </span><span class="s13">1</span><span class="s1"> ? </span><span class="s10">'easy'</span><span class="s1"> : currentLevel &lt;= </span><span class="s13">3</span><span class="s1"> ? </span><span class="s10">'medium'</span><span class="s1"> : </span><span class="s10">'hard'</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> operations = [</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>{ type: </span><span class="s10">'add'</span><span class="s1">, </span><span class="s8">symbol</span><span class="s1">: </span><span class="s10">'+'</span><span class="s1">, generate: (max) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">const</span><span class="s1"> num1 = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * max) + </span><span class="s13">5</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">const</span><span class="s1"> num2 = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * max) + </span><span class="s13">5</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> { num1, num2, answer: num1 + num2 };</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}},</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>{ type: </span><span class="s10">'subtract'</span><span class="s1">, </span><span class="s8">symbol</span><span class="s1">: </span><span class="s10">'-'</span><span class="s1">, generate: (max) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">const</span><span class="s1"> num1 = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * max) + </span><span class="s13">15</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">const</span><span class="s1"> num2 = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * num1) + </span><span class="s13">1</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> { num1, num2, answer: num1 - num2 };</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}},</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>{ type: </span><span class="s10">'multiply'</span><span class="s1">, </span><span class="s8">symbol</span><span class="s1">: </span><span class="s10">'×'</span><span class="s1">, generate: (max) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">const</span><span class="s1"> num1 = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * </span><span class="s13">9</span><span class="s1">) + </span><span class="s13">2</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">const</span><span class="s1"> num2 = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * </span><span class="s13">9</span><span class="s1">) + </span><span class="s13">2</span><span class="s1">;</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                    </span></span><span class="s1">// Introduce division sometimes in medium/hard mode</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">if</span><span class="s1"> (difficulty !== </span><span class="s10">'easy'</span><span class="s1"> &amp;&amp; </span><span class="s12">Math</span><span class="s1">.random() &gt; </span><span class="s13">0.7</span><span class="s1">) {<span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">const</span><span class="s1"> divisor = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * </span><span class="s13">9</span><span class="s1">) + </span><span class="s13">2</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">const</span><span class="s1"> quotient = </span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * </span><span class="s13">10</span><span class="s1">) + </span><span class="s13">2</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">return</span><span class="s1"> { num1: divisor * quotient, num2: divisor, </span><span class="s8">symbol</span><span class="s1">: </span><span class="s10">'÷'</span><span class="s1">, answer: quotient, type: </span><span class="s10">'divide'</span><span class="s1"> };</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> { num1, num2, answer: num1 * num2 };</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>];</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Determine max number range based on difficulty</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">let</span><span class="s1"> maxRange = </span><span class="s13">10</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (difficulty === </span><span class="s10">'medium'</span><span class="s1">) maxRange = </span><span class="s13">12</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (difficulty === </span><span class="s10">'hard'</span><span class="s1">) maxRange = </span><span class="s13">15</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (isBossMode) maxRange = </span><span class="s13">20</span><span class="s1">;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> op = operations[</span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * operations.length)];</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Generate using the max range relevant to the operation</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">return</span><span class="s1"> { ...op.generate(maxRange), </span><span class="s8">symbol</span><span class="s1">: op.</span><span class="s8">symbol</span><span class="s1">, type: op.type };</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> updateUI() {</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Guard clause to prevent rendering before root element is available</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (!rootElement) </span><span class="s8">return</span><span class="s1">;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>rootElement.innerHTML = renderContent();</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Re-attach event listeners after rendering (crucial for vanilla JS)</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>attachEventListeners();</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Focus the input field if we are in battle and ready for input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (gameState === </span><span class="s10">'battle'</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> input = document.getElementById(</span><span class="s10">'answer-input'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (input) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>input.focus();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> attachEventListeners() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (gameState === </span><span class="s10">'hero-select'</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document.querySelectorAll(</span><span class="s10">'.hero-select-button'</span><span class="s1">).forEach(button =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>button.onclick = (e) =&gt; selectHero(e.currentTarget.dataset.heroName);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>});</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s8">else</span><span class="s1"> </span><span class="s8">if</span><span class="s1"> (gameState === </span><span class="s10">'battle'</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> attackButton = document.getElementById(</span><span class="s10">'attack-button'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (attackButton) attackButton.onclick = checkAnswer;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> answerInput = document.getElementById(</span><span class="s10">'answer-input'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (answerInput) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>answerInput.onkeyup = (e) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">if</span><span class="s1"> (e.key === </span><span class="s10">'Enter'</span><span class="s1">) checkAnswer();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>};</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s8">else</span><span class="s1"> </span><span class="s8">if</span><span class="s1"> (gameState === </span><span class="s10">'level-complete'</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> nextButton = document.getElementById(</span><span class="s10">'next-level-button'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (nextButton) nextButton.onclick = () =&gt; startNewLevel(level + </span><span class="s13">1</span><span class="s1">, </span><span class="s8">false</span><span class="s1">);</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> bossButton = document.getElementById(</span><span class="s10">'boss-battle-button'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (bossButton) bossButton.onclick = () =&gt; startNewLevel(level, </span><span class="s8">true</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s8">else</span><span class="s1"> </span><span class="s8">if</span><span class="s1"> (gameState === </span><span class="s10">'victory'</span><span class="s1"> || gameState === </span><span class="s10">'game-over'</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> newGameButton = document.getElementById(</span><span class="s10">'new-game-button'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (newGameButton) newGameButton.onclick = () =&gt; { gameState = </span><span class="s10">'hero-select'</span><span class="s1">; updateUI(); };</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> tryAgainButton = document.getElementById(</span><span class="s10">'try-again-button'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (tryAgainButton) tryAgainButton.onclick = () =&gt; startNewLevel(level, isBoss);</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> continueButton = document.getElementById(</span><span class="s10">'continue-button'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (continueButton) continueButton.onclick = () =&gt; startNewLevel(level + </span><span class="s13">1</span><span class="s1">, </span><span class="s8">false</span><span class="s1">);</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> changeHeroButton = document.getElementById(</span><span class="s10">'change-hero-button'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (changeHeroButton) changeHeroButton.onclick = () =&gt; { gameState = </span><span class="s10">'hero-select'</span><span class="s1">; updateUI(); };</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- GAME LOGIC FUNCTIONS ---</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> startNewLevel(newLevel, boss) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>level = newLevel;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>isBoss = boss;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> opponentVillains = boss ? bossVillains : villains;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> fallbackVillains = boss ? bossVillains : villains;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Select a villain from the opposite universe if possible</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> opponentOptions = opponentVillains.filter(v =&gt; v.universe !== selectedHero.universe);</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>villain = opponentOptions.length &gt; </span><span class="s13">0</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>? opponentOptions[</span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * opponentOptions.length)]</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>: fallbackVillains[</span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * fallbackVillains.length)];</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>villainHealth = boss ? </span><span class="s13">10</span><span class="s1"> : </span><span class="s13">5</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>heroHealth = </span><span class="s13">3</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>combo = </span><span class="s13">0</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>powerUp = </span><span class="s8">null</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>currentQuestion = generateQuestion(newLevel, boss);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>gameState = </span><span class="s10">'battle'</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>updateUI();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> selectHero(heroName) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>selectedHero = heroes.find(h =&gt; h.name === heroName);</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Start game immediately after selection</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>startNewLevel(</span><span class="s13">1</span><span class="s1">, </span><span class="s8">false</span><span class="s1">);<span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> triggerAnimation(animationType, callback) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> animationOverlay = document.getElementById(</span><span class="s10">'animation-overlay'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> root = document.querySelector(</span><span class="s10">'body'</span><span class="s1">);</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (animationOverlay) {</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// Clear previous animation classes</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">const</span><span class="s1"> animationText = animationOverlay.querySelector(</span><span class="s10">'div'</span><span class="s1">);</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// Set animation text properties</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (animationType === </span><span class="s10">'COMBO!'</span><span class="s1">) {</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">                    </span>animationText.className = </span><span class="s1">`text-7xl md:text-9xl font-black text-yellow-300 explode pulse-glow`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>animationText.textContent = </span><span class="s10">'COMBO!'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s8">else</span><span class="s1"> </span><span class="s8">if</span><span class="s1"> (animationType === </span><span class="s10">'POW'</span><span class="s1">) {</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">                    </span>animationText.className = </span><span class="s1">`text-7xl md:text-9xl font-black text-red-500 explode`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>animationText.textContent = </span><span class="s10">'POW!'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s8">else</span><span class="s1"> </span><span class="s8">if</span><span class="s1"> (animationType === </span><span class="s10">'MISS'</span><span class="s1">) {</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">                    </span>animationText.className = </span><span class="s1">`text-7xl md:text-9xl font-black text-gray-400 explode`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>animationText.textContent = </span><span class="s10">'MISS!'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// Trigger shake if damage taken</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (animationType === </span><span class="s10">'MISS'</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">if</span><span class="s1"> (root) root.classList.add(</span><span class="s10">'shake'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Wait for animation duration then proceed</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (animationOverlay) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>animationOverlay.querySelector(</span><span class="s10">'div'</span><span class="s1">).textContent = </span><span class="s10">''</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>animationOverlay.querySelector(</span><span class="s10">'div'</span><span class="s1">).className = </span><span class="s10">''</span><span class="s1">; </span><span class="s14">// Clear classes</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (root) root.classList.remove(</span><span class="s10">'shake'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>callback();</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span>}, </span><span class="s13">800</span><span class="s4">); </span><span class="s1">// Shorter duration for smoother gameplay</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> checkAnswer() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> input = document.getElementById(</span><span class="s10">'answer-input'</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> feedbackBox = document.getElementById(</span><span class="s10">'feedback-box'</span><span class="s1">);</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (!input || !feedbackBox || input.value === </span><span class="s10">''</span><span class="s1"> || isNaN(parseInt(input.value, </span><span class="s13">10</span><span class="s1">))) {</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// If input is empty or invalid, just return without error</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">return</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> submittedAnswer = parseInt(input.value, </span><span class="s13">10</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> correct = submittedAnswer === currentQuestion.answer;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Disable input and button while feedback is showing</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>input.disabled = </span><span class="s8">true</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s10">'attack-button'</span><span class="s1">).disabled = </span><span class="s8">true</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">let</span><span class="s1"> animationText = </span><span class="s10">''</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">let</span><span class="s1"> finalVillainHealth = villainHealth;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">let</span><span class="s1"> finalHeroHealth = heroHealth;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (correct) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>score++;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>combo++;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>animationText = combo &gt; </span><span class="s13">1</span><span class="s1"> ? </span><span class="s10">'COMBO!'</span><span class="s1"> : </span><span class="s10">'POW'</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">let</span><span class="s1"> damage = </span><span class="s13">1</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (combo &gt;= </span><span class="s13">3</span><span class="s1">) damage += </span><span class="s13">1</span><span class="s1">; </span><span class="s14">// 3-hit combo grants bonus damage</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">let</span><span class="s1"> finalDamage = damage;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (powerUp === </span><span class="s10">'DOUBLE'</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>finalDamage *= </span><span class="s13">2</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>powerUp = </span><span class="s8">null</span><span class="s1">; </span><span class="s14">// Power up consumed</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>finalVillainHealth = villainHealth - finalDamage;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">                </span>feedbackBox.className = </span><span class="s1">'mt-4 md:mt-6 py-4 md:py-6 rounded-2xl text-2xl md:text-4xl font-black border-4 md:border-6 border-black shadow-xl bg-green-600 text-white slide-in'</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>feedbackBox.innerHTML = </span><span class="s10">`⚡ DIRECT HIT! -</span><span class="s1">${finalDamage}</span><span class="s10"> HP`</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s8">else</span><span class="s1"> {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>combo = </span><span class="s13">0</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>animationText = </span><span class="s10">'MISS'</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">let</span><span class="s1"> damageTaken = </span><span class="s13">1</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">let</span><span class="s1"> damageText = </span><span class="s10">'-1 HP'</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (powerUp === </span><span class="s10">'SHIELD'</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>damageTaken = </span><span class="s13">0</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>powerUp = </span><span class="s8">null</span><span class="s1">; </span><span class="s14">// Power up consumed</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>damageText = </span><span class="s10">'SHIELD ACTIVATED!'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>finalHeroHealth = heroHealth - damageTaken;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">                </span>feedbackBox.className = </span><span class="s1">'mt-4 md:mt-6 py-4 md:py-6 rounded-2xl text-2xl md:text-4xl font-black border-4 md:border-6 border-black shadow-xl bg-gray-600 text-white slide-in'</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>feedbackBox.innerHTML = </span><span class="s10">`❌ MISSED! </span><span class="s1">${damageText}</span><span class="s10"> (Answer: </span><span class="s1">${currentQuestion.answer}</span><span class="s10">)`</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Update state variables after calculations but before animation callback</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>villainHealth = finalVillainHealth;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>heroHealth = finalHeroHealth;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>triggerAnimation(animationText, () =&gt; {</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// Check win/loss conditions</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">if</span><span class="s1"> (villainHealth &lt;= </span><span class="s13">0</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>gameState = isBoss ? </span><span class="s10">'victory'</span><span class="s1"> : </span><span class="s10">'level-complete'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s8">else</span><span class="s1"> </span><span class="s8">if</span><span class="s1"> (heroHealth &lt;= </span><span class="s13">0</span><span class="s1">) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>gameState = </span><span class="s10">'game-over'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s8">else</span><span class="s1"> {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s14">// Continue battle</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>currentQuestion = generateQuestion(level, isBoss);</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                    </span></span><span class="s1">// 1 in 4 chance to find a power-up if one isn't active and not in boss mode</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">if</span><span class="s1"> (!powerUp &amp;&amp; </span><span class="s12">Math</span><span class="s1">.random() &lt; </span><span class="s13">0.25</span><span class="s1"> &amp;&amp; !isBoss) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s8">const</span><span class="s1"> powerUpsList = [</span><span class="s10">'DOUBLE'</span><span class="s1">, </span><span class="s10">'SHIELD'</span><span class="s1">];</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>powerUp = powerUpsList[</span><span class="s12">Math</span><span class="s1">.floor(</span><span class="s12">Math</span><span class="s1">.random() * powerUpsList.length)];</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// Clear input and re-enable for next round (or transition to next state)</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>input.value = </span><span class="s10">''</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>input.disabled = </span><span class="s8">false</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(</span><span class="s10">'attack-button'</span><span class="s1">).disabled = </span><span class="s8">false</span><span class="s1">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s1">// Remove feedback text class immediately to re-hide it before next action</span></p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space">                </span>feedbackBox.className = </span><span class="s1">'mt-4 py-4 rounded-2xl text-2xl font-black text-white invisible'</span><span class="s4">;</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>updateUI(); </span><span class="s14">// Re-render the game state</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- RENDER HTML TEMPLATES ---</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> renderHealthBar(current, max, color) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> percentage = </span><span class="s12">Math</span><span class="s1">.max(</span><span class="s13">0</span><span class="s1">, (current / max) * </span><span class="s13">100</span><span class="s1">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">return</span><span class="s1"> </span><span class="s10">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="h-4 md:h-6 w-full bg-gray-300 rounded-full overflow-hidden shadow-inner"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="h-full </span><span class="s4">${color}</span><span class="s1"> transition-all duration-300 ease-out rounded-full" style="width: </span><span class="s4">${percentage}</span><span class="s1">%;"&gt;&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="text-xs md:text-sm font-semibold mt-1 text-white"&gt;</span><span class="s4">${</span><span class="s12">Math</span><span class="s4">.max(</span><span class="s13">0</span><span class="s4">, current)}</span><span class="s1"> / </span><span class="s4">${max}</span><span class="s1"> HP&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> renderHeroSelect() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">return</span><span class="s1"> </span><span class="s10">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="max-w-4xl mx-auto p-4 md:p-8 bg-white/10 backdrop-blur-sm rounded-3xl shadow-2xl text-center slide-in"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h1 class="text-4xl md:text-5xl font-extrabold text-yellow-300 mb-6 border-b-4 border-yellow-500 pb-2"&gt;CHOOSE YOUR HERO&lt;/h1&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-white mb-8 text-lg md:text-xl"&gt;Select a legendary hero to battle the forces of math crime across the multiverse!&lt;/p&gt;</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                    </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s4">${heroes.map(hero =&gt; </span><span class="s1">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;button class="hero-select-button </span><span class="s4">${hero.color}</span><span class="s1"> p-4 md:p-6 rounded-xl hover:shadow-xl transition duration-200 transform hover:scale-105 border-4 border-white/50" data-hero-name="</span><span class="s4">${hero.name}</span><span class="s1">"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="w-20 h-20 mx-auto rounded-full bg-black flex items-center justify-center mb-3 shadow-lg"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;span class="</span><span class="s4">${hero.</span><span class="s12">IconClass</span><span class="s4">}</span><span class="s1">"&gt;</span><span class="s4">${hero.</span><span class="s12">IconText</span><span class="s4">}</span><span class="s1">&lt;/span&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;h2 class="text-xl md:text-2xl font-bold text-white"&gt;</span><span class="s4">${hero.name}</span><span class="s1">&lt;/h2&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;p class="text-sm md:text-base text-gray-300"&gt;</span><span class="s4">${hero.power}</span><span class="s1">&lt;/p&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>`</span><span class="s4">).join(</span><span class="s1">''</span><span class="s4">)}</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> renderBattleScreen() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> maxHeroHealth = </span><span class="s13">3</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> maxVillainHealth = isBoss ? </span><span class="s13">10</span><span class="s1"> : </span><span class="s13">5</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> heroIconClass = selectedHero.</span><span class="s12">IconClass</span><span class="s1">.replace(</span><span class="s10">'text-6xl'</span><span class="s1">, </span><span class="s10">'text-4xl md:text-6xl'</span><span class="s1">);</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Determine difficulty label</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">let</span><span class="s1"> difficultyText = </span><span class="s10">''</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (level === </span><span class="s13">1</span><span class="s1">) difficultyText = </span><span class="s10">'EASY'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">else</span><span class="s1"> </span><span class="s8">if</span><span class="s1"> (level &lt;= </span><span class="s13">3</span><span class="s1">) difficultyText = </span><span class="s10">'MEDIUM'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">else</span><span class="s1"> difficultyText = </span><span class="s10">'HARD'</span><span class="s1">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">if</span><span class="s1"> (isBoss) difficultyText = </span><span class="s10">'BOSS BATTLE!'</span><span class="s1">;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">return</span><span class="s1"> </span><span class="s10">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="max-w-4xl mx-auto p-4 md:p-8 bg-white/10 backdrop-blur-sm rounded-3xl shadow-2xl text-white slide-in"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="text-center mb-4"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h1 class="text-3xl md:text-4xl font-extrabold text-yellow-300"&gt;Level </span><span class="s4">${level}</span><span class="s1"> - </span><span class="s4">${difficultyText}</span><span class="s1">&lt;/h1&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-xl text-gray-300"&gt;Score: </span><span class="s4">${score}</span><span class="s1"> | Combo: </span><span class="s4">${combo}</span><span class="s1">&lt;/p&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;!-- Character Stats --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="flex justify-between items-start mb-6"&gt;</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                        </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;!-- Hero Card --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="w-1/2 p-2 md:p-4 bg-blue-800/50 rounded-xl shadow-lg mr-2 border-2 border-blue-400"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="flex items-center"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="w-10 h-10 md:w-16 md:h-16 rounded-full bg-black flex items-center justify-center mr-3 float"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;span class="</span><span class="s4">${heroIconClass}</span><span class="s1">"&gt;</span><span class="s4">${selectedHero.</span><span class="s12">IconText</span><span class="s4">}</span><span class="s1">&lt;/span&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;h2 class="text-xl md:text-2xl font-bold"&gt;</span><span class="s4">${selectedHero.name}</span><span class="s1">&lt;/h2&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                    </span></span><span class="s4">${renderHealthBar(heroHealth, maxHeroHealth, </span><span class="s1">'bg-green-500'</span><span class="s4">)}</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="mt-2 text-sm text-gray-300"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span></span><span class="s4">${powerUp ? </span><span class="s1">`&lt;span class="inline-block bg-yellow-500 text-black px-2 py-1 rounded-full font-bold text-xs pulse-glow"&gt;POWER UP: </span><span class="s4">${powerUp}</span><span class="s1">&lt;/span&gt;`</span><span class="s4"> : </span><span class="s1">''</span><span class="s4">}</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;!-- Villain Card --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="w-1/2 p-2 md:p-4 bg-red-800/50 rounded-xl shadow-lg ml-2 border-2 border-red-400 text-right"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="flex items-center justify-end"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;h2 class="text-xl md:text-2xl font-bold"&gt;</span><span class="s4">${villain.name}</span><span class="s1">&lt;/h2&gt;</span></p>
+<p class="p5"><span class="s10"><span class="Apple-converted-space">                                    </span></span><span class="s1">${renderHealthBar(villainHealth, maxVillainHealth, </span><span class="s10">'bg-red-500'</span><span class="s1">)}</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="w-10 h-10 md:w-16 md:h-16 text-4xl md:text-6xl flex items-center justify-center ml-3 float"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                    </span></span><span class="s4">${villain.emoji}</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;!-- Battle Action Area --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-xl text-center"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-xl md:text-2xl italic text-gray-400 mb-4"&gt;"</span><span class="s4">${villain.taunt}</span><span class="s1">"&lt;/p&gt;</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                        </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;!-- Question Box --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-yellow-400 text-black p-4 md:p-6 rounded-xl mb-6 shadow-2xl"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;p class="text-4xl md:text-6xl font-black"&gt;</span><span class="s4">${currentQuestion.num1}</span><span class="s1"> </span><span class="s4">${currentQuestion.</span><span class="s8">symbol</span><span class="s4">}</span><span class="s1"> </span><span class="s4">${currentQuestion.num2}</span><span class="s1"> = ?&lt;/p&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;!-- Input and Attack --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="flex flex-col md:flex-row gap-4"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;input<span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>id="answer-input"</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>type="number"<span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>placeholder="Your answer"<span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>class="flex-grow p-3 md:p-4 text-2xl text-center rounded-xl bg-white text-gray-800 border-4 border-yellow-500 focus:outline-none focus:border-blue-500 transition duration-150"</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>inputmode="numeric"</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>/&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;button<span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>id="attack-button"</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span>class="px-6 py-3 md:py-4 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg transition duration-200 hover:bg-red-700 hover:shadow-xl transform active:scale-95 whitespace-nowrap"</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                                </span></span><span class="s4">${selectedHero.power}</span><span class="s1"> ATTACK!</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                        </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;!-- Feedback Box --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;!-- Set to invisible by default, will be revealed with correct/incorrect class --&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div id="feedback-box" class="mt-4 py-4 rounded-2xl text-2xl font-black text-white invisible"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> renderLevelComplete() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">const</span><span class="s1"> isMegaBoss = villain.isBoss;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">return</span><span class="s1"> </span><span class="s10">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="max-w-md mx-auto p-8 bg-green-700/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h1 class="text-5xl font-extrabold text-yellow-300 mb-4"&gt;VICTORY!&lt;/h1&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-2xl mb-6"&gt;You defeated the </span><span class="s4">${villain.name}</span><span class="s1">!&lt;/p&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xl mb-8"&gt;Current Score: </span><span class="s4">${score}</span><span class="s1">&lt;/p&gt;</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s4">${isMegaBoss ? </span><span class="s1">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-3xl font-bold mb-8"&gt;You have conquered the BOSS BATTLE!&lt;/p&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button id="new-game-button" class="w-full mb-4 py-3 bg-yellow-500 text-black text-xl font-bold rounded-xl shadow-lg transition hover:bg-yellow-400"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>START NEW GAME</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button id="change-hero-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>CHOOSE NEW HERO</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>`</span><span class="s4"> : </span><span class="s1">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button id="next-level-button" class="w-full mb-4 py-3 bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-blue-700"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>PROCEED TO LEVEL </span><span class="s4">${level + </span><span class="s13">1</span><span class="s4">}</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button id="boss-battle-button" class="w-full py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-red-700 pulse-glow"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                            </span>CHALLENGE A BOSS NOW!</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>`</span><span class="s4">}</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> renderGameOver() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">return</span><span class="s1"> </span><span class="s10">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="max-w-md mx-auto p-8 bg-red-800/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h1 class="text-5xl font-extrabold text-yellow-300 mb-4"&gt;GAME OVER&lt;/h1&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-2xl mb-6"&gt;The </span><span class="s4">${villain.name}</span><span class="s1"> overpowered you.&lt;/p&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xl mb-8"&gt;Final Score: </span><span class="s4">${score}</span><span class="s1">&lt;/p&gt;</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                    </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="try-again-button" class="w-full mb-4 py-3 bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-blue-700"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>RETRY LEVEL </span><span class="s4">${level}</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="new-game-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>START NEW GAME</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> renderVictoryScreen() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">             </span></span><span class="s8">return</span><span class="s1"> </span><span class="s10">`</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="max-w-md mx-auto p-8 bg-purple-800/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h1 class="text-5xl font-extrabold text-yellow-300 mb-4"&gt;EPIC VICTORY!&lt;/h1&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-2xl mb-6"&gt;You have defeated the mighty </span><span class="s4">${villain.name}</span><span class="s1"> and saved the day!&lt;/p&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xl mb-8"&gt;Final Score: </span><span class="s4">${score}</span><span class="s1">&lt;/p&gt;</span></p>
+<p class="p10"><span class="s1"><span class="Apple-converted-space">                    </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="continue-button" class="w-full mb-4 py-3 bg-green-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-green-700"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>CONTINUE ADVENTURE (Level </span><span class="s4">${level + </span><span class="s13">1</span><span class="s4">}</span><span class="s1">)</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="change-hero-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600"&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                        </span>CHOOSE NEW HERO</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">function</span><span class="s1"> renderContent() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">switch</span><span class="s1"> (gameState) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">case</span><span class="s1"> </span><span class="s10">'hero-select'</span><span class="s1">:</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> renderHeroSelect();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">case</span><span class="s1"> </span><span class="s10">'battle'</span><span class="s1">:</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> renderBattleScreen();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">case</span><span class="s1"> </span><span class="s10">'level-complete'</span><span class="s1">:</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> renderLevelComplete();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">case</span><span class="s1"> </span><span class="s10">'game-over'</span><span class="s1">:</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> renderGameOver();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">case</span><span class="s1"> </span><span class="s10">'victory'</span><span class="s1">:</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> renderVictoryScreen();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s8">default</span><span class="s1">:</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s8">return</span><span class="s1"> renderHeroSelect();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- INITIALIZATION ---</span></p>
+<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// Use DOMContentLoaded to ensure the script runs only after the HTML structure is loaded.</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>document.addEventListener(</span><span class="s10">'DOMContentLoaded'</span><span class="s1">, updateUI);</span></p>
+<p class="p7"><span class="s7"></span><br></p>
+<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">script</span><span class="s3">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;/</span><span class="s1">body</span><span class="s3">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;/</span><span class="s1">html</span><span class="s3">&gt;</span></p>
+<p class="p11"><span class="s7"></span><br></p>
+<p class="p11"><span class="s7"></span><br></p>
 </body>
-
 </html>
