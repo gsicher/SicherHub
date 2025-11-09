@@ -1,1105 +1,566 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Superhero Math Battle</title>
-
-    <!-- Load Tailwind CSS -->
-
+    <title>Marvel Math Battle</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
-
-
-    <!-- Configure Tailwind for custom colors and font -->
-
     <style>
-
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-
-        :root {
-
-            font-family: 'Inter', sans-serif;
-
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+        
+        body {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 1px;
         }
-
-
-
-        /* --- CSS Keyframe Definitions (Pure CSS Animations) --- */
 
         @keyframes shake {
-
             0%, 100% { transform: translateX(0); }
-
             25% { transform: translateX(-10px) rotate(-5deg); }
-
             75% { transform: translateX(10px) rotate(5deg); }
-
         }
-
         @keyframes explode {
-
             0% { transform: scale(0) rotate(0deg); opacity: 1; }
-
             50% { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
-
             100% { transform: scale(3) rotate(360deg); opacity: 0; }
-
         }
-
         @keyframes pulse-glow {
-
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); }
-
-            50% { box-shadow: 0 0 40px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 255, 0, 0.6); }
-
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 60px rgba(255, 215, 0, 1);
+                transform: scale(1.05);
+            }
         }
-
         @keyframes slide-in {
-
-            from { opacity: 0; }
-
-            to { opacity: 1; }
-
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes float {
-
             0%, 100% { transform: translateY(0px); }
-
-            50% { transform: translateY(-10px); }
-
+            50% { transform: translateY(-15px); }
         }
-
+        @keyframes comic-pop {
+            0% { transform: scale(0) rotate(-45deg); }
+            60% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        
         .shake { animation: shake 0.5s; }
-
         .explode { animation: explode 0.6s ease-out; }
-
         .pulse-glow { animation: pulse-glow 1s infinite; }
-
         .slide-in { animation: slide-in 0.5s; }
-
         .float { animation: float 2s ease-in-out infinite; }
-
+        .comic-pop { animation: comic-pop 0.4s ease-out; }
+        
+        .comic-border {
+            border: 6px solid black;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.3);
+        }
+        
+        .text-comic {
+            text-shadow: 3px 3px 0px rgba(255,255,255,0.3);
+        }
     </style>
-
 </head>
-
-<body class="bg-gradient-to-b from-blue-900 via-purple-900 to-black min-h-screen p-4">
-
-    <div id="game-root">
-
-        <!-- Game content will render here -->
-
-    </div>
-
+<body class="bg-gradient-to-br from-red-600 via-orange-500 to-yellow-400 min-h-screen p-4">
+    <div id="game-root"></div>
     
-
-    <!-- Animation Overlay for POW/MISS effects -->
-
-    <div id="animation-overlay" class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-
+    <div id="animation-overlay" class="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
         <div></div>
-
     </div>
-
-
 
     <script>
-
-        // --- DATA ---
-
         const heroes = [
-
-            { name: 'Batman', color: 'bg-gray-700', IconText: 'B', IconClass: 'text-white text-6xl font-black', power: 'Batarang', universe: 'DC' },
-
-            { name: 'Superman', color: 'bg-blue-600', IconText: 'S', IconClass: 'text-yellow-400 text-6xl font-black', power: 'Heat Vision', universe: 'DC' },
-
-            { name: 'The Flash', color: 'bg-red-600', IconText: 'F', IconClass: 'text-yellow-300 text-6xl font-black', power: 'Speed Punch', universe: 'DC' },
-
-            { name: 'Wonder Woman', color: 'bg-yellow-500', IconText: 'W', IconClass: 'text-red-700 text-6xl font-black', power: 'Lasso', universe: 'DC' },
-
-            { name: 'Spider-Man', color: 'bg-red-700', IconText: 'S', IconClass: 'text-blue-500 text-6xl font-black', power: 'Web Shooter', universe: 'Marvel' },
-
-            { name: 'Iron Man', color: 'bg-red-800', IconText: 'I', IconClass: 'text-yellow-400 text-6xl font-black', power: 'Repulsor Blast', universe: 'Marvel' },
-
+            { 
+                name: 'Spider-Man', 
+                gradient: 'from-red-600 to-blue-600', 
+                emoji: '🕷️',
+                power: 'Web Blast',
+                color: 'bg-red-600'
+            },
+            { 
+                name: 'Iron Man', 
+                gradient: 'from-red-700 to-yellow-500', 
+                emoji: '⚙️',
+                power: 'Repulsor Ray',
+                color: 'bg-red-700'
+            },
+            { 
+                name: 'Captain America', 
+                gradient: 'from-blue-600 to-red-600', 
+                emoji: '🛡️',
+                power: 'Shield Throw',
+                color: 'bg-blue-600'
+            },
+            { 
+                name: 'Black Panther', 
+                gradient: 'from-purple-700 to-black', 
+                emoji: '🐾',
+                power: 'Claw Strike',
+                color: 'bg-purple-700'
+            },
+            { 
+                name: 'Thor', 
+                gradient: 'from-blue-500 to-gray-700', 
+                emoji: '⚡',
+                power: 'Lightning Bolt',
+                color: 'bg-blue-500'
+            },
+            { 
+                name: 'Hulk', 
+                gradient: 'from-green-600 to-green-900', 
+                emoji: '💪',
+                power: 'SMASH',
+                color: 'bg-green-600'
+            },
         ];
-
-
 
         const villains = [
-
-            { name: 'Green Goblin', emoji: '👺', taunt: 'You\'ll never catch me!', universe: 'Marvel' },
-
-            { name: 'Joker', emoji: '🃏', taunt: 'Let\'s put a smile on that face!', universe: 'DC' },
-
-            { name: 'Venom', emoji: '👾', taunt: 'We are Venom!', universe: 'Marvel' },
-
-            { name: 'Penguin', emoji: '🐧', taunt: 'Wak wak wak!', universe: 'DC' },
-
-            { name: 'Mysterio', emoji: '🎭', taunt: 'It\'s all an illusion!', universe: 'Marvel' }
-
+            { name: 'Green Goblin', emoji: '👺', taunt: 'You\'ll never catch me!' },
+            { name: 'Venom', emoji: '👾', taunt: 'We are Venom!' },
+            { name: 'Mysterio', emoji: '🎭', taunt: 'It\'s all an illusion!' },
+            { name: 'Doctor Octopus', emoji: '🐙', taunt: 'My genius is unmatched!' },
+            { name: 'Red Skull', emoji: '💀', taunt: 'Hail Hydra!' }
         ];
-
-
 
         const bossVillains = [
-
-            { name: 'THANOS', emoji: '👊', taunt: 'I am inevitable!', universe: 'Marvel', isBoss: true },
-
-            { name: 'DARKSEID', emoji: '👹', taunt: 'Kneel before Darkseid!', universe: 'DC', isBoss: true },
-
-            { name: 'ULTRON', emoji: '🤖', taunt: 'There are no strings on me!', universe: 'Marvel', isBoss: true }
-
+            { name: 'THANOS', emoji: '👊', taunt: 'I am inevitable!', isBoss: true },
+            { name: 'ULTRON', emoji: '🤖', taunt: 'No strings on me!', isBoss: true },
+            { name: 'GALACTUS', emoji: '🌌', taunt: 'I HUNGER!', isBoss: true }
         ];
 
-
-
-        // --- GAME STATE (Global Variables) ---
-
         let gameState = 'hero-select';
-
         let selectedHero = null;
-
         let villain = null;
-
         let score = 0;
-
         let villainHealth = 5;
-
         let heroHealth = 3;
-
         let currentQuestion = null;
-
         let combo = 0;
-
         let powerUp = null;
-
         let isBoss = false;
-
         let level = 1;
 
-
-
         const rootElement = document.getElementById('game-root');
-
         
-
-        // --- UTILITIES ---
-
-
-
         function generateQuestion(currentLevel, isBossMode) {
-
             const difficulty = isBossMode ? 'hard' : currentLevel <= 1 ? 'easy' : currentLevel <= 3 ? 'medium' : 'hard';
-
             
-
             const operations = [
-
                 { type: 'add', symbol: '+', generate: (max) => {
-
                     const num1 = Math.floor(Math.random() * max) + 5;
-
                     const num2 = Math.floor(Math.random() * max) + 5;
-
                     return { num1, num2, answer: num1 + num2 };
-
                 }},
-
                 { type: 'subtract', symbol: '-', generate: (max) => {
-
                     const num1 = Math.floor(Math.random() * max) + 15;
-
                     const num2 = Math.floor(Math.random() * num1) + 1;
-
                     return { num1, num2, answer: num1 - num2 };
-
                 }},
-
                 { type: 'multiply', symbol: '×', generate: (max) => {
-
                     const num1 = Math.floor(Math.random() * 9) + 2;
-
                     const num2 = Math.floor(Math.random() * 9) + 2;
-
-                    // Introduce division sometimes in medium/hard mode
-
                     if (difficulty !== 'easy' && Math.random() > 0.7) { 
-
                         const divisor = Math.floor(Math.random() * 9) + 2;
-
                         const quotient = Math.floor(Math.random() * 10) + 2;
-
                         return { num1: divisor * quotient, num2: divisor, symbol: '÷', answer: quotient, type: 'divide' };
-
                     }
-
                     return { num1, num2, answer: num1 * num2 };
-
                 }}
-
             ];
 
-
-
-            // Determine max number range based on difficulty
-
             let maxRange = 10;
-
             if (difficulty === 'medium') maxRange = 12;
-
             if (difficulty === 'hard') maxRange = 15;
-
             if (isBossMode) maxRange = 20;
 
-
-
             const op = operations[Math.floor(Math.random() * operations.length)];
-
-            
-
-            // Generate using the max range relevant to the operation
-
             return { ...op.generate(maxRange), symbol: op.symbol, type: op.type };
-
         }
-
         
-
         function updateUI() {
-
-            // Guard clause to prevent rendering before root element is available
-
             if (!rootElement) return;
-
-
-
             rootElement.innerHTML = renderContent();
-
-            // Re-attach event listeners after rendering (crucial for vanilla JS)
-
             attachEventListeners();
 
-
-
-            // Focus the input field if we are in battle and ready for input
-
             if (gameState === 'battle') {
-
                 const input = document.getElementById('answer-input');
-
-                if (input) {
-
-                    input.focus();
-
-                }
-
+                if (input) input.focus();
             }
-
         }
-
-
 
         function attachEventListeners() {
-
             if (gameState === 'hero-select') {
-
                 document.querySelectorAll('.hero-select-button').forEach(button => {
-
                     button.onclick = (e) => selectHero(e.currentTarget.dataset.heroName);
-
                 });
-
             } else if (gameState === 'battle') {
-
                 const attackButton = document.getElementById('attack-button');
-
                 if (attackButton) attackButton.onclick = checkAnswer;
-
                 
-
                 const answerInput = document.getElementById('answer-input');
-
                 if (answerInput) {
-
                     answerInput.onkeyup = (e) => {
-
                         if (e.key === 'Enter') checkAnswer();
-
                     };
-
                 }
-
             } else if (gameState === 'level-complete') {
-
                 const nextButton = document.getElementById('next-level-button');
-
                 if (nextButton) nextButton.onclick = () => startNewLevel(level + 1, false);
-
                 
-
                 const bossButton = document.getElementById('boss-battle-button');
-
                 if (bossButton) bossButton.onclick = () => startNewLevel(level, true);
-
             } else if (gameState === 'victory' || gameState === 'game-over') {
-
                 const newGameButton = document.getElementById('new-game-button');
-
                 if (newGameButton) newGameButton.onclick = () => { gameState = 'hero-select'; updateUI(); };
-
                 
-
                 const tryAgainButton = document.getElementById('try-again-button');
-
                 if (tryAgainButton) tryAgainButton.onclick = () => startNewLevel(level, isBoss);
-
                 
-
                 const continueButton = document.getElementById('continue-button');
-
                 if (continueButton) continueButton.onclick = () => startNewLevel(level + 1, false);
-
                 
-
                 const changeHeroButton = document.getElementById('change-hero-button');
-
                 if (changeHeroButton) changeHeroButton.onclick = () => { gameState = 'hero-select'; updateUI(); };
-
             }
-
         }
-
-
-
-        // --- GAME LOGIC FUNCTIONS ---
-
-
 
         function startNewLevel(newLevel, boss) {
-
             level = newLevel;
-
             isBoss = boss;
-
             
-
             const opponentVillains = boss ? bossVillains : villains;
-
-            const fallbackVillains = boss ? bossVillains : villains;
-
+            villain = opponentVillains[Math.floor(Math.random() * opponentVillains.length)];
             
-
-            // Select a villain from the opposite universe if possible
-
-            const opponentOptions = opponentVillains.filter(v => v.universe !== selectedHero.universe);
-
-            
-
-            villain = opponentOptions.length > 0 
-
-                ? opponentOptions[Math.floor(Math.random() * opponentOptions.length)]
-
-                : fallbackVillains[Math.floor(Math.random() * fallbackVillains.length)];
-
-            
-
             villainHealth = boss ? 10 : 5;
-
             heroHealth = 3;
-
             combo = 0;
-
             powerUp = null;
-
             currentQuestion = generateQuestion(newLevel, boss);
-
             gameState = 'battle';
-
             
-
             updateUI();
-
         }
-
-
 
         function selectHero(heroName) {
-
             selectedHero = heroes.find(h => h.name === heroName);
-
-            // Start game immediately after selection
-
             startNewLevel(1, false); 
-
         }
-
-
 
         function triggerAnimation(animationType, callback) {
-
             const animationOverlay = document.getElementById('animation-overlay');
-
             const root = document.querySelector('body');
-
             
-
             if (animationOverlay) {
-
-                // Clear previous animation classes
-
                 const animationText = animationOverlay.querySelector('div');
-
                 
-
-                // Set animation text properties
-
-                if (animationType === 'COMBO!') {
-
-                    animationText.className = `text-7xl md:text-9xl font-black text-yellow-300 explode pulse-glow`;
-
-                    animationText.textContent = 'COMBO!';
-
+                if (animationType === 'UNSTOPPABLE!') {
+                    animationText.className = `text-8xl md:text-9xl font-black text-yellow-300 explode pulse-glow comic-pop`;
+                    animationText.style.textShadow = '6px 6px 0px rgba(0,0,0,0.8)';
+                    animationText.textContent = '🔥 UNSTOPPABLE! 🔥';
+                } else if (animationType === 'COMBO!') {
+                    animationText.className = `text-8xl md:text-9xl font-black text-orange-400 explode comic-pop`;
+                    animationText.style.textShadow = '6px 6px 0px rgba(0,0,0,0.8)';
+                    animationText.textContent = '⚡ COMBO! ⚡';
                 } else if (animationType === 'POW') {
-
-                    animationText.className = `text-7xl md:text-9xl font-black text-red-500 explode`;
-
-                    animationText.textContent = 'POW!';
-
+                    animationText.className = `text-8xl md:text-9xl font-black text-red-500 explode comic-pop`;
+                    animationText.style.textShadow = '6px 6px 0px rgba(0,0,0,0.8)';
+                    animationText.textContent = '💥 POW! 💥';
                 } else if (animationType === 'MISS') {
-
-                    animationText.className = `text-7xl md:text-9xl font-black text-gray-400 explode`;
-
-                    animationText.textContent = 'MISS!';
-
+                    animationText.className = `text-8xl md:text-9xl font-black text-gray-600 explode`;
+                    animationText.style.textShadow = '6px 6px 0px rgba(0,0,0,0.8)';
+                    animationText.textContent = '❌ MISS! ❌';
                 }
-
-
-
-                // Trigger shake if damage taken
 
                 if (animationType === 'MISS') {
-
                     if (root) root.classList.add('shake');
-
                 }
-
             }
-
-
-
-            // Wait for animation duration then proceed
 
             setTimeout(() => {
-
                 if (animationOverlay) {
-
                     animationOverlay.querySelector('div').textContent = '';
-
-                    animationOverlay.querySelector('div').className = ''; // Clear classes
-
+                    animationOverlay.querySelector('div').className = '';
                 }
-
                 if (root) root.classList.remove('shake');
-
                 callback();
-
-            }, 800); // Shorter duration for smoother gameplay
-
+            }, 1000);
         }
-
-
 
         function checkAnswer() {
-
             const input = document.getElementById('answer-input');
-
             const feedbackBox = document.getElementById('feedback-box');
-
             
-
             if (!input || !feedbackBox || input.value === '' || isNaN(parseInt(input.value, 10))) {
-
-                // If input is empty or invalid, just return without error
-
                 return;
-
             }
-
-
 
             const submittedAnswer = parseInt(input.value, 10);
-
             const correct = submittedAnswer === currentQuestion.answer;
-
             
-
-            // Disable input and button while feedback is showing
-
             input.disabled = true;
-
             document.getElementById('attack-button').disabled = true;
-
             
-
             let animationText = '';
-
             let finalVillainHealth = villainHealth;
-
             let finalHeroHealth = heroHealth;
 
-
-
             if (correct) {
-
                 score++;
-
                 combo++;
-
-                animationText = combo > 1 ? 'COMBO!' : 'POW';
-
                 
-
+                if (combo >= 5) animationText = 'UNSTOPPABLE!';
+                else if (combo >= 3) animationText = 'COMBO!';
+                else animationText = 'POW';
+                
                 let damage = 1;
-
-                if (combo >= 3) damage += 1; // 3-hit combo grants bonus damage
-
+                if (combo >= 3) damage += 1;
                 let finalDamage = damage;
 
-
-
                 if (powerUp === 'DOUBLE') {
-
                     finalDamage *= 2;
-
-                    powerUp = null; // Power up consumed
-
+                    powerUp = null;
                 }
-
                 finalVillainHealth = villainHealth - finalDamage;
 
-
-
-                feedbackBox.className = 'mt-4 md:mt-6 py-4 md:py-6 rounded-2xl text-2xl md:text-4xl font-black border-4 md:border-6 border-black shadow-xl bg-green-600 text-white slide-in';
-
-                feedbackBox.innerHTML = `⚡ DIRECT HIT! -${finalDamage} HP`;
-
+                feedbackBox.className = 'mt-6 py-6 rounded-2xl text-3xl md:text-5xl font-black border-8 border-black shadow-2xl bg-gradient-to-r from-green-500 to-green-600 text-white slide-in comic-pop text-comic';
+                feedbackBox.innerHTML = `⚡ DIRECT HIT! -${finalDamage} DAMAGE! ⚡`;
                 
-
             } else {
-
                 combo = 0;
-
                 animationText = 'MISS';
-
                 
-
                 let damageTaken = 1;
-
-                let damageText = '-1 HP';
-
+                let damageText = 'OUCH! -1 HP';
                 
-
                 if (powerUp === 'SHIELD') {
-
                     damageTaken = 0;
-
-                    powerUp = null; // Power up consumed
-
-                    damageText = 'SHIELD ACTIVATED!';
-
+                    powerUp = null;
+                    damageText = '🛡️ SHIELD SAVED YOU!';
                 }
-
                 finalHeroHealth = heroHealth - damageTaken;
 
-
-
-                feedbackBox.className = 'mt-4 md:mt-6 py-4 md:py-6 rounded-2xl text-2xl md:text-4xl font-black border-4 md:border-6 border-black shadow-xl bg-gray-600 text-white slide-in';
-
-                feedbackBox.innerHTML = `❌ MISSED! ${damageText} (Answer: ${currentQuestion.answer})`;
-
+                feedbackBox.className = 'mt-6 py-6 rounded-2xl text-3xl md:text-5xl font-black border-8 border-black shadow-2xl bg-gradient-to-r from-gray-600 to-gray-700 text-white slide-in text-comic';
+                feedbackBox.innerHTML = `${damageText}<br><span class="text-2xl">Answer: ${currentQuestion.answer}</span>`;
             }
-
-
-
-            // Update state variables after calculations but before animation callback
 
             villainHealth = finalVillainHealth;
-
             heroHealth = finalHeroHealth;
-
             
-
             triggerAnimation(animationText, () => {
-
-                // Check win/loss conditions
-
                 if (villainHealth <= 0) {
-
                     gameState = isBoss ? 'victory' : 'level-complete';
-
                 } else if (heroHealth <= 0) {
-
                     gameState = 'game-over';
-
                 } else {
-
-                    // Continue battle
-
                     currentQuestion = generateQuestion(level, isBoss);
-
-                    // 1 in 4 chance to find a power-up if one isn't active and not in boss mode
-
                     if (!powerUp && Math.random() < 0.25 && !isBoss) {
-
                         const powerUpsList = ['DOUBLE', 'SHIELD'];
-
                         powerUp = powerUpsList[Math.floor(Math.random() * powerUpsList.length)];
-
                     }
-
                 }
-
                 
-
-                // Clear input and re-enable for next round (or transition to next state)
-
                 input.value = '';
-
                 input.disabled = false;
-
                 document.getElementById('attack-button').disabled = false;
-
+                feedbackBox.className = 'invisible';
                 
-
-                // Remove feedback text class immediately to re-hide it before next action
-
-                feedbackBox.className = 'mt-4 py-4 rounded-2xl text-2xl font-black text-white invisible';
-
-                
-
-                updateUI(); // Re-render the game state
-
+                updateUI();
             });
-
         }
-
-
-
-        // --- RENDER HTML TEMPLATES ---
-
-
 
         function renderHealthBar(current, max, color) {
-
             const percentage = Math.max(0, (current / max) * 100);
-
             return `
-
-                <div class="h-4 md:h-6 w-full bg-gray-300 rounded-full overflow-hidden shadow-inner">
-
-                    <div class="h-full ${color} transition-all duration-300 ease-out rounded-full" style="width: ${percentage}%;"></div>
-
+                <div class="h-6 md:h-8 w-full bg-gray-800 rounded-full overflow-hidden border-4 border-black">
+                    <div class="h-full ${color} transition-all duration-300 ease-out" style="width: ${percentage}%;"></div>
                 </div>
-
-                <div class="text-xs md:text-sm font-semibold mt-1 text-white">${Math.max(0, current)} / ${max} HP</div>
-
+                <div class="text-sm md:text-lg font-black mt-1 text-white text-comic">${Math.max(0, current)} / ${max} HP</div>
             `;
-
         }
-
         
-
         function renderHeroSelect() {
-
             return `
-
-                <div class="max-w-4xl mx-auto p-4 md:p-8 bg-white/10 backdrop-blur-sm rounded-3xl shadow-2xl text-center slide-in">
-
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-yellow-300 mb-6 border-b-4 border-yellow-500 pb-2">CHOOSE YOUR HERO</h1>
-
-                    <p class="text-white mb-8 text-lg md:text-xl">Select a legendary hero to battle the forces of math crime across the multiverse!</p>
-
+                <div class="max-w-5xl mx-auto p-6 md:p-10 bg-white comic-border rounded-3xl slide-in">
+                    <h1 class="text-5xl md:text-7xl font-black text-center text-red-600 mb-4 text-comic">
+                        ⚡ MARVEL MATH BATTLE ⚡
+                    </h1>
+                    <p class="text-center text-2xl md:text-3xl text-gray-800 mb-8 font-bold">CHOOSE YOUR HERO!</p>
                     
-
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
-
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                         ${heroes.map(hero => `
-
-                            <button class="hero-select-button ${hero.color} p-4 md:p-6 rounded-xl hover:shadow-xl transition duration-200 transform hover:scale-105 border-4 border-white/50" data-hero-name="${hero.name}">
-
-                                <div class="w-20 h-20 mx-auto rounded-full bg-black flex items-center justify-center mb-3 shadow-lg">
-
-                                    <span class="${hero.IconClass}">${hero.IconText}</span>
-
+                            <button class="hero-select-button bg-gradient-to-br ${hero.gradient} p-6 md:p-8 rounded-2xl hover:scale-105 transition-all duration-200 comic-border float" data-hero-name="${hero.name}">
+                                <div class="text-7xl md:text-8xl mb-4 text-center">
+                                    ${hero.emoji}
                                 </div>
-
-                                <h2 class="text-xl md:text-2xl font-bold text-white">${hero.name}</h2>
-
-                                <p class="text-sm md:text-base text-gray-300">${hero.power}</p>
-
+                                <h2 class="text-2xl md:text-3xl font-black text-white text-center text-comic">${hero.name}</h2>
+                                <p class="text-lg md:text-xl text-yellow-300 text-center font-bold mt-2">${hero.power}</p>
                             </button>
-
                         `).join('')}
-
                     </div>
-
                 </div>
-
             `;
-
         }
-
-
 
         function renderBattleScreen() {
-
             const maxHeroHealth = 3;
-
             const maxVillainHealth = isBoss ? 10 : 5;
 
-            const heroIconClass = selectedHero.IconClass.replace('text-6xl', 'text-4xl md:text-6xl');
-
-
-
-            // Determine difficulty label
-
             let difficultyText = '';
-
-            if (level === 1) difficultyText = 'EASY';
-
-            else if (level <= 3) difficultyText = 'MEDIUM';
-
-            else difficultyText = 'HARD';
-
-            if (isBoss) difficultyText = 'BOSS BATTLE!';
-
-
+            let difficultyColor = 'text-green-400';
+            if (level === 1) { difficultyText = 'EASY MODE'; difficultyColor = 'text-green-400'; }
+            else if (level <= 3) { difficultyText = 'MEDIUM MODE'; difficultyColor = 'text-yellow-400'; }
+            else { difficultyText = 'HARD MODE'; difficultyColor = 'text-orange-400'; }
+            if (isBoss) { difficultyText = '💀 BOSS BATTLE 💀'; difficultyColor = 'text-red-500'; }
 
             return `
-
-                <div class="max-w-4xl mx-auto p-4 md:p-8 bg-white/10 backdrop-blur-sm rounded-3xl shadow-2xl text-white slide-in">
-
-                    <div class="text-center mb-4">
-
-                        <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-300">Level ${level} - ${difficultyText}</h1>
-
-                        <p class="text-xl text-gray-300">Score: ${score} | Combo: ${combo}</p>
-
+                <div class="max-w-5xl mx-auto p-6 md:p-10 bg-white comic-border rounded-3xl slide-in">
+                    <div class="text-center mb-6">
+                        <h1 class="text-4xl md:text-5xl font-black ${difficultyColor} text-comic mb-2">LEVEL ${level} - ${difficultyText}</h1>
+                        <div class="flex justify-center gap-8 text-2xl md:text-3xl font-black">
+                            <span class="text-blue-600">SCORE: ${score}</span>
+                            ${combo > 0 ? `<span class="text-orange-500 pulse-glow">🔥 ${combo}X COMBO!</span>` : ''}
+                        </div>
                     </div>
 
-
-
-                    <!-- Character Stats -->
-
-                    <div class="flex justify-between items-start mb-6">
-
-                        
-
-                        <!-- Hero Card -->
-
-                        <div class="w-1/2 p-2 md:p-4 bg-blue-800/50 rounded-xl shadow-lg mr-2 border-2 border-blue-400">
-
-                            <div class="flex items-center">
-
-                                <div class="w-10 h-10 md:w-16 md:h-16 rounded-full bg-black flex items-center justify-center mr-3 float">
-
-                                    <span class="${heroIconClass}">${selectedHero.IconText}</span>
-
-                                </div>
-
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gradient-to-br ${selectedHero.gradient} p-4 md:p-6 rounded-2xl comic-border">
+                            <div class="flex items-center justify-center mb-3">
+                                <div class="text-6xl md:text-7xl float mr-4">${selectedHero.emoji}</div>
                                 <div>
-
-                                    <h2 class="text-xl md:text-2xl font-bold">${selectedHero.name}</h2>
-
-                                    ${renderHealthBar(heroHealth, maxHeroHealth, 'bg-green-500')}
-
+                                    <h2 class="text-2xl md:text-3xl font-black text-white text-comic">${selectedHero.name}</h2>
+                                    ${renderHealthBar(heroHealth, maxHeroHealth, 'bg-green-400')}
                                 </div>
-
                             </div>
-
-                            <div class="mt-2 text-sm text-gray-300">
-
-                                ${powerUp ? `<span class="inline-block bg-yellow-500 text-black px-2 py-1 rounded-full font-bold text-xs pulse-glow">POWER UP: ${powerUp}</span>` : ''}
-
-                            </div>
-
+                            ${powerUp ? `<div class="bg-yellow-400 text-black px-4 py-2 rounded-xl font-black text-center text-xl comic-border pulse-glow">⚡ ${powerUp} POWER! ⚡</div>` : ''}
                         </div>
 
-
-
-                        <!-- Villain Card -->
-
-                        <div class="w-1/2 p-2 md:p-4 bg-red-800/50 rounded-xl shadow-lg ml-2 border-2 border-red-400 text-right">
-
-                            <div class="flex items-center justify-end">
-
+                        <div class="bg-gradient-to-br from-purple-700 to-black p-4 md:p-6 rounded-2xl comic-border">
+                            <div class="flex items-center justify-center mb-3">
                                 <div>
-
-                                    <h2 class="text-xl md:text-2xl font-bold">${villain.name}</h2>
-
+                                    <h2 class="text-2xl md:text-3xl font-black text-red-400 text-comic text-right">${villain.name}</h2>
                                     ${renderHealthBar(villainHealth, maxVillainHealth, 'bg-red-500')}
-
                                 </div>
-
-                                <div class="w-10 h-10 md:w-16 md:h-16 text-4xl md:text-6xl flex items-center justify-center ml-3 float">
-
-                                    ${villain.emoji}
-
-                                </div>
-
+                                <div class="text-6xl md:text-7xl float ml-4">${villain.emoji}</div>
                             </div>
-
                         </div>
-
                     </div>
 
-
-
-                    <!-- Battle Action Area -->
-
-                    <div class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-xl text-center">
-
-                        <p class="text-xl md:text-2xl italic text-gray-400 mb-4">"${villain.taunt}"</p>
-
+                    <div class="bg-gradient-to-br from-yellow-400 to-orange-400 p-6 md:p-10 rounded-3xl comic-border">
+                        <p class="text-2xl md:text-3xl italic text-center text-gray-800 font-bold mb-6">"${villain.taunt}"</p>
                         
-
-                        <!-- Question Box -->
-
-                        <div class="bg-yellow-400 text-black p-4 md:p-6 rounded-xl mb-6 shadow-2xl">
-
-                            <p class="text-4xl md:text-6xl font-black">${currentQuestion.num1} ${currentQuestion.symbol} ${currentQuestion.num2} = ?</p>
-
+                        <div class="bg-white p-6 md:p-8 rounded-2xl mb-6 comic-border">
+                            <p class="text-5xl md:text-7xl font-black text-center text-gray-900 text-comic">
+                                ${currentQuestion.num1} ${currentQuestion.symbol} ${currentQuestion.num2} = ?
+                            </p>
                         </div>
 
-
-
-                        <!-- Input and Attack -->
-
-                        <div class="flex flex-col md:flex-row gap-4">
-
+                        <div class="flex flex-col md:flex-row gap-4 mb-4">
                             <input 
-
                                 id="answer-input"
-
                                 type="number" 
-
-                                placeholder="Your answer" 
-
-                                class="flex-grow p-3 md:p-4 text-2xl text-center rounded-xl bg-white text-gray-800 border-4 border-yellow-500 focus:outline-none focus:border-blue-500 transition duration-150"
-
+                                placeholder="TYPE ANSWER" 
+                                class="flex-grow p-4 md:p-6 text-3xl md:text-4xl text-center rounded-2xl bg-white text-gray-900 border-8 border-black focus:outline-none focus:border-blue-600 font-black"
                                 inputmode="numeric"
-
                             />
-
                             <button 
-
                                 id="attack-button"
-
-                                class="px-6 py-3 md:py-4 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg transition duration-200 hover:bg-red-700 hover:shadow-xl transform active:scale-95 whitespace-nowrap"
-
+                                class="px-8 py-4 md:py-6 bg-gradient-to-r from-red-600 to-red-700 text-white text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform active:scale-95 text-comic"
                             >
-
-                                ${selectedHero.power} ATTACK!
-
+                                💥 ${selectedHero.power}! 💥
                             </button>
-
                         </div>
-
                         
-
-                        <!-- Feedback Box -->
-
-                        <!-- Set to invisible by default, will be revealed with correct/incorrect class -->
-
-                        <div id="feedback-box" class="mt-4 py-4 rounded-2xl text-2xl font-black text-white invisible">
-
-                        </div>
-
+                        <div id="feedback-box" class="invisible"></div>
                     </div>
-
                 </div>
-
             `;
-
         }
-
-
 
         function renderLevelComplete() {
-
             const isMegaBoss = villain.isBoss;
-
             return `
-
-                <div class="max-w-md mx-auto p-8 bg-green-700/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in">
-
-                    <h1 class="text-5xl font-extrabold text-yellow-300 mb-4">VICTORY!</h1>
-
-                    <p class="text-2xl mb-6">You defeated the ${villain.name}!</p>
-
-                    <p class="text-xl mb-8">Current Score: ${score}</p>
-
-
+                <div class="max-w-2xl mx-auto p-8 md:p-12 bg-gradient-to-br from-green-400 to-green-600 comic-border rounded-3xl text-center text-white slide-in comic-pop">
+                    <h1 class="text-6xl md:text-7xl font-black text-yellow-300 mb-6 text-comic">🎉 VICTORY! 🎉</h1>
+                    <p class="text-3xl md:text-4xl mb-4 font-black">You defeated ${villain.name}!</p>
+                    <p class="text-2xl md:text-3xl mb-8 font-bold">Score: ${score} points!</p>
 
                     ${isMegaBoss ? `
-
-                        <p class="text-3xl font-bold mb-8">You have conquered the BOSS BATTLE!</p>
-
-                        <button id="new-game-button" class="w-full mb-4 py-3 bg-yellow-500 text-black text-xl font-bold rounded-xl shadow-lg transition hover:bg-yellow-400">
-
-                            START NEW GAME
-
+                        <p class="text-4xl font-black mb-8 text-yellow-300">⭐ BOSS CONQUERED! ⭐</p>
+                        <button id="new-game-button" class="w-full mb-4 py-5 bg-yellow-400 text-black text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform">
+                            START NEW ADVENTURE
                         </button>
-
-                        <button id="change-hero-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600">
-
-                            CHOOSE NEW HERO
-
+                        <button id="change-hero-button" class="w-full py-5 bg-gray-700 text-white text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform">
+                            SWITCH HERO
                         </button>
-
                     ` : `
-
-                        <button id="next-level-button" class="w-full mb-4 py-3 bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-blue-700">
-
-                            PROCEED TO LEVEL ${level + 1}
-
+                        <button id="next-level-button" class="w-full mb-4 py-5 bg-blue-600 text-white text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform">
+                            ⬆️ LEVEL ${level + 1} ⬆️
                         </button>
-
-                        <button id="boss-battle-button" class="w-full py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-red-700 pulse-glow">
-
-                            CHALLENGE A BOSS NOW!
-
+                        <button id="boss-battle-button" class="w-full py-5 bg-red-600 text-white text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform pulse-glow">
+                            💀 BOSS BATTLE! 💀
                         </button>
-
                     `}
-
                 </div>
-
             `;
-
         }
-
-
 
         function renderGameOver() {
-
             return `
-
-                <div class="max-w-md mx-auto p-8 bg-red-800/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in">
-
-                    <h1 class="text-5xl font-extrabold text-yellow-300 mb-4">GAME OVER</h1>
-
-                    <p class="text-2xl mb-6">The ${villain.name} overpowered you.</p>
-
-                    <p class="text-xl mb-8">Final Score: ${score}</p>
-
+                <div class="max-w-2xl mx-auto p-8 md:p-12 bg-gradient-to-br from-gray-700 to-black comic-border rounded-3xl text-center text-white slide-in">
+                    <h1 class="text-6xl md:text-7xl font-black text-red-500 mb-6 text-comic">💀 DEFEATED 💀</h1>
+                    <p class="text-3xl md:text-4xl mb-4 font-black">${villain.name} won this battle!</p>
+                    <p class="text-2xl md:text-3xl mb-8 font-bold">Final Score: ${score}</p>
                     
-
-                    <button id="try-again-button" class="w-full mb-4 py-3 bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-blue-700">
-
-                        RETRY LEVEL ${level}
-
+                    <button id="try-again-button" class="w-full mb-4 py-5 bg-blue-600 text-white text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform">
+                        🔄 RETRY LEVEL ${level}
                     </button>
-
-                    <button id="new-game-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600">
-
-                        START NEW GAME
-
+                    <button id="new-game-button" class="w-full py-5 bg-gray-600 text-white text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform">
+                        NEW GAME
                     </button>
-
                 </div>
-
             `;
-
         }
-
         
-
         function renderVictoryScreen() {
-
              return `
-
-                <div class="max-w-md mx-auto p-8 bg-purple-800/80 backdrop-blur-sm rounded-3xl shadow-2xl text-center text-white slide-in">
-
-                    <h1 class="text-5xl font-extrabold text-yellow-300 mb-4">EPIC VICTORY!</h1>
-
-                    <p class="text-2xl mb-6">You have defeated the mighty ${villain.name} and saved the day!</p>
-
-                    <p class="text-xl mb-8">Final Score: ${score}</p>
-
+                <div class="max-w-2xl mx-auto p-8 md:p-12 bg-gradient-to-br from-purple-600 to-pink-600 comic-border rounded-3xl text-center text-white slide-in comic-pop">
+                    <h1 class="text-6xl md:text-7xl font-black text-yellow-300 mb-6 text-comic">🏆 LEGENDARY! 🏆</h1>
+                    <p class="text-3xl md:text-4xl mb-4 font-black">You defeated ${villain.name}!</p>
+                    <p class="text-2xl md:text-3xl mb-8 font-bold">Epic Score: ${score}</p>
                     
-
-                    <button id="continue-button" class="w-full mb-4 py-3 bg-green-600 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-green-700">
-
-                        CONTINUE ADVENTURE (Level ${level + 1})
-
+                    <button id="continue-button" class="w-full mb-4 py-5 bg-green-600 text-white text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform">
+                        ⬆️ CONTINUE TO LEVEL ${level + 1}
                     </button>
-
-                    <button id="change-hero-button" class="w-full py-3 bg-gray-500 text-white text-xl font-bold rounded-xl shadow-lg transition hover:bg-gray-600">
-
-                        CHOOSE NEW HERO
-
+                    <button id="change-hero-button" class="w-full py-5 bg-gray-700 text-white text-2xl md:text-3xl font-black rounded-2xl comic-border hover:scale-105 transition-transform">
+                        SWITCH HERO
                     </button>
-
                 </div>
-
             `;
-
         }
-
-
 
         function renderContent() {
-
             switch (gameState) {
-
                 case 'hero-select':
-
                     return renderHeroSelect();
-
                 case 'battle':
-
                     return renderBattleScreen();
-
                 case 'level-complete':
-
                     return renderLevelComplete();
-
                 case 'game-over':
-
                     return renderGameOver();
-
                 case 'victory':
-
                     return renderVictoryScreen();
-
                 default:
-
                     return renderHeroSelect();
-
             }
-
         }
 
-
-
-        // --- INITIALIZATION ---
-
-        // Use DOMContentLoaded to ensure the script runs only after the HTML structure is loaded.
-
         document.addEventListener('DOMContentLoaded', updateUI);
-
-
-
     </script>
-
 </body>
-
 </html>
+Family site with recipes and learning apps - Claude
