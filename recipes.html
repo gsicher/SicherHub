@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Recipe Book</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-orange-50 to-red-50 min-h-screen">
+    <div id="app"></div>
+
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://feeblomqksxjlrjympxe.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZWJsb21xa3N4amxyanltcHhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2ODYwMzksImV4cCI6MjA3ODI2MjAzOX0.tYiFXbnASWiihtjSqTwsU5qi4oEziaJFvA5OPb9GSzA';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Simple password protection
+        const FAMILY_PASSWORD = 'family2025'; // Change this to whatever you want
+        
+        let isLoggedIn = sessionStorage.getItem('recipeAuth') === 'true';
+        let recipes = [];
+        let currentView = 'list'; // list, add, edit, view
+        let currentRecipe = null;
+        let searchTerm = '';
+        let filterCategory = 'all';
+
+        const categories = ['All', 'Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack', 'Drink'];
+
+        async function loadRecipes() {
+            const { data, error } = await supabase
+                .from('recipes')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Error loading recipes:', error);
+                return;
+            }
+            recipes = data || [];
+            render();
+        }
+
+        async function addRecipe(recipe) {
+            const { data, error } = await supabase
+                .from('recipes')
+                .insert([recipe])
+                .select();
+            
+            if (error) {
+                alert('Error adding recipe: ' + error.message);
+                return;
+            }
+            await loadRecipes();
+            currentView = 'list';
+        }
+
+        async function updateRecipe(id, updates) {
+            const { error } = await supabase
+                .from('recipes')
+                .update(updates)
+                .eq('id', id);
+            
+            if (error) {
+                alert('Error updating recipe: ' + error.message);
+                return;
+            }
+            await loadRecipes();
+            currentView = 'list';
+        }
+
+        async function deleteRecipe(id) {
+            if (!confirm('Delete this recipe?')) return;
+            
+            const { error } = await supabase
+                .from('recipes')
+                .delete()
+                .eq('id', id);
+            
+            if (error) {
+                alert('Error deleting recipe: ' + error.message);
+                return;
+            }
+            await loadRecipes();
+            currentView = 'list';
+        }
+
+        async function toggleFavorite(id, currentFavorite) {
+            await updateRecipe(id, { is_favorite: !currentFavorite });
+        }
+
+        async function updateRating(id, rating) {
+            await updateRecipe(id, { rating });
+        }
+
+        function login() {
+            const password = prompt('Enter family password:');
+            if (password === FAMILY_PASSWORD) {
+                isLoggedIn = true;
+                sessionStorage.setItem('recipeAuth', 'true');
+                render();
+            } else {
+                alert('Incorrect password!');
+            }
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            sessionStorage.removeItem('recipeAuth');
+            currentView = 'list';
+            render();
+        }
+
+        function getFilteredRecipes() {
+            return recipes.filter(recipe => {
+                const matchesSearch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     (recipe.ingredients && recipe.ingredients.toLowerCase().includes(searchTerm.toLowerCase()));
+                const matchesCategory = filterCategory === 'all' || recipe.category === filterCategory;
+                return matchesSearch && matchesCategory;
+            });
+        }
+
+        function renderLoginScreen() {
+            return `
+                <div class="min-h-screen flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+                        <div class="text-center mb-8">
+                            <div class="text-6xl mb-4">📖</div>
+                            <h1 class="text-4xl font-bold text-gray-800 mb-2">Family Recipe Book</h1>
+                            <p class="text-gray-600">Login to view and manage recipes</p>
+                        </div>
+                        <button onclick="login()" class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 rounded-xl font-bold text-lg hover:from-orange-600 hover:to-red-600 transition-all">
+                            🔐 Login
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHeader() {
+            return `
+                <header class="bg-white shadow-lg sticky top-0 z-50">
+                    <div class="max-w-7xl mx-auto px-4 py-4">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="text-4xl">📖</span>
+                                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Family Recipe Book</h1>
+                            </div>
+                            <button onclick="logout()" class="text-gray-600 hover:text-gray-800 font-semibold">
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </header>
+            `;
+        }
+
+        function renderSearchBar() {
+            return `
+                <div class="max-w-7xl mx-auto px-4 py-6">
+                    <div class="bg-white rounded-xl shadow-lg p-4 mb-4">
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <input 
+                                type="text" 
+                                placeholder="🔍 Search recipes..."
+                                value="${searchTerm}"
+                                onkeyup="searchTerm = this.value; render();"
+                                class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none"
+                            />
+                            <select 
+                                onchange="filterCategory = this.value.toLowerCase(); render();"
+                                class="px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none"
+                            >
+                                ${categories.map(cat => 
+                                    `<option value="${cat.toLowerCase()}" ${filterCategory === cat.toLowerCase() ? 'selected' : ''}>${cat}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                    </div>
+                    <button 
+                        onclick="currentView = 'add'; currentRecipe = null; render();"
+                        class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 rounded-xl font-bold text-lg hover:from-orange-600 hover:to-red-600 transition-all shadow-lg"
+                    >
+                        ➕ Add New Recipe
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderRecipeList() {
+            const filteredRecipes = getFilteredRecipes();
+            
+            if (filteredRecipes.length === 0) {
+                return `
+                    <div class="max-w-7xl mx-auto px-4 py-12 text-center">
+                        <div class="text-6xl mb-4">🍽️</div>
+                        <p class="text-xl text-gray-600">No recipes found. Add your first recipe!</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${filteredRecipes.map(recipe => `
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all cursor-pointer" onclick="currentRecipe = ${JSON.stringify(recipe).replace(/"/g, '&quot;')}; currentView = 'view'; render();">
+                            ${recipe.image_url ? `
+                                <img src="${recipe.image_url}" alt="${recipe.title}" class="w-full h-48 object-cover">
+                            ` : `
+                                <div class="w-full h-48 bg-gradient-to-br from-orange-200 to-red-200 flex items-center justify-center text-6xl">
+                                    🍽️
+                                </div>
+                            `}
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-xl font-bold text-gray-800 flex-1">${recipe.title}</h3>
+                                    <button onclick="event.stopPropagation(); toggleFavorite('${recipe.id}', ${recipe.is_favorite});" class="text-2xl">
+                                        ${recipe.is_favorite ? '⭐' : '☆'}
+                                    </button>
+                                </div>
+                                ${recipe.description ? `<p class="text-gray-600 text-sm mb-3 line-clamp-2">${recipe.description}</p>` : ''}
+                                <div class="flex justify-between items-center">
+                                    <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-semibold">
+                                        ${recipe.category || 'Uncategorized'}
+                                    </span>
+                                    <div class="flex gap-1">
+                                        ${[1,2,3,4,5].map(star => `
+                                            <button onclick="event.stopPropagation(); updateRating('${recipe.id}', ${star});" class="text-lg">
+                                                ${star <= (recipe.rating || 0) ? '⭐' : '☆'}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderRecipeForm(recipe = null) {
+            const isEdit = recipe !== null;
+            return `
+                <div class="max-w-3xl mx-auto px-4 py-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6">${isEdit ? 'Edit Recipe' : 'Add New Recipe'}</h2>
+                        <form onsubmit="handleRecipeSubmit(event, ${isEdit}); return false;">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Recipe Title *</label>
+                                    <input type="text" name="title" required value="${recipe?.title || ''}" 
+                                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                                    <select name="category" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none">
+                                        ${categories.slice(1).map(cat => 
+                                            `<option value="${cat}" ${recipe?.category === cat ? 'selected' : ''}>${cat}</option>`
+                                        ).join('')}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                                    <textarea name="description" rows="3" 
+                                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none">${recipe?.description || ''}</textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Ingredients (one per line)</label>
+                                    <textarea name="ingredients" rows="6" 
+                                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none">${recipe?.ingredients || ''}</textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Instructions</label>
+                                    <textarea name="instructions" rows="8" 
+                                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none">${recipe?.instructions || ''}</textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Image URL (optional)</label>
+                                    <input type="url" name="image_url" value="${recipe?.image_url || ''}" 
+                                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none"
+                                        placeholder="https://example.com/image.jpg">
+                                </div>
+
+                                <div class="flex gap-4 pt-4">
+                                    <button type="submit" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-bold text-lg hover:from-green-600 hover:to-green-700 transition-all">
+                                        ${isEdit ? '💾 Save Changes' : '➕ Add Recipe'}
+                                    </button>
+                                    <button type="button" onclick="currentView = 'list'; render();" class="flex-1 bg-gray-200 text-gray-700 py-4 rounded-xl font-bold text-lg hover:bg-gray-300 transition-all">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderRecipeView() {
+            if (!currentRecipe) return '';
+            
+            return `
+                <div class="max-w-4xl mx-auto px-4 py-6">
+                    <button onclick="currentView = 'list'; render();" class="mb-4 text-gray-600 hover:text-gray-800 font-semibold">
+                        ← Back to Recipes
+                    </button>
+                    
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        ${currentRecipe.image_url ? `
+                            <img src="${currentRecipe.image_url}" alt="${currentRecipe.title}" class="w-full h-64 object-cover">
+                        ` : `
+                            <div class="w-full h-64 bg-gradient-to-br from-orange-200 to-red-200 flex items-center justify-center text-8xl">
+                                🍽️
+                            </div>
+                        `}
+                        
+                        <div class="p-8">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h1 class="text-4xl font-bold text-gray-800 mb-2">${currentRecipe.title}</h1>
+                                    <span class="px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-sm font-semibold">
+                                        ${currentRecipe.category || 'Uncategorized'}
+                                    </span>
+                                </div>
+                                <button onclick="toggleFavorite('${currentRecipe.id}', ${currentRecipe.is_favorite});" class="text-4xl">
+                                    ${currentRecipe.is_favorite ? '⭐' : '☆'}
+                                </button>
+                            </div>
+
+                            <div class="flex gap-2 mb-6">
+                                ${[1,2,3,4,5].map(star => `
+                                    <button onclick="updateRating('${currentRecipe.id}', ${star});" class="text-3xl">
+                                        ${star <= (currentRecipe.rating || 0) ? '⭐' : '☆'}
+                                    </button>
+                                `).join('')}
+                            </div>
+
+                            ${currentRecipe.description ? `
+                                <p class="text-gray-700 text-lg mb-6">${currentRecipe.description}</p>
+                            ` : ''}
+
+                            ${currentRecipe.ingredients ? `
+                                <div class="mb-6">
+                                    <h2 class="text-2xl font-bold text-gray-800 mb-4">🥘 Ingredients</h2>
+                                    <ul class="space-y-2">
+                                        ${currentRecipe.ingredients.split('\n').filter(i => i.trim()).map(ingredient => `
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-orange-500 font-bold">•</span>
+                                                <span class="text-gray-700">${ingredient}</span>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+
+                            ${currentRecipe.instructions ? `
+                                <div class="mb-6">
+                                    <h2 class="text-2xl font-bold text-gray-800 mb-4">👨‍🍳 Instructions</h2>
+                                    <div class="text-gray-700 whitespace-pre-wrap">${currentRecipe.instructions}</div>
+                                </div>
+                            ` : ''}
+
+                            <div class="flex gap-4 pt-6 border-t">
+                                <button onclick="currentView = 'edit'; render();" class="flex-1 bg-blue-500 text-white py-3 rounded-xl font-bold hover:bg-blue-600 transition-all">
+                                    ✏️ Edit
+                                </button>
+                                <button onclick="deleteRecipe('${currentRecipe.id}');" class="flex-1 bg-red-500 text-white py-3 rounded-xl font-bold hover:bg-red-600 transition-all">
+                                    🗑️ Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleRecipeSubmit(event, isEdit) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const recipe = {
+                title: formData.get('title'),
+                description: formData.get('description'),
+                ingredients: formData.get('ingredients'),
+                instructions: formData.get('instructions'),
+                category: formData.get('category'),
+                image_url: formData.get('image_url')
+            };
+
+            if (isEdit && currentRecipe) {
+                updateRecipe(currentRecipe.id, recipe);
+            } else {
+                addRecipe(recipe);
+            }
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            
+            if (!isLoggedIn) {
+                app.innerHTML = renderLoginScreen();
+                return;
+            }
+
+            let content = renderHeader();
+            
+            if (currentView === 'list') {
+                content += renderSearchBar();
+                content += renderRecipeList();
+            } else if (currentView === 'add') {
+                content += renderRecipeForm();
+            } else if (currentView === 'edit') {
+                content += renderRecipeForm(currentRecipe);
+            } else if (currentView === 'view') {
+                content += renderRecipeView();
+            }
+
+            app.innerHTML = content;
+        }
+
+        // Initialize
+        if (isLoggedIn) {
+            loadRecipes();
+        } else {
+            render();
+        }
+    </script>
+</body>
+</html>
